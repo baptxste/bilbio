@@ -8,7 +8,7 @@ int main() {
     cout << "Entrez votre texte : ";
     getline(std::cin, entree_utilisateur);
     
-    fstream fichier("../bd/test.txt", std::ios::in | std::ios::out | std::ios::app );
+    fstream fichier("../bdtest/test.txt", std::ios::in | std::ios::out | std::ios::app );
     if (fichier.is_open()) {
     // Écrire l'entrée de l'utilisateur dans le fichier
     fichier << entree_utilisateur << std::endl;

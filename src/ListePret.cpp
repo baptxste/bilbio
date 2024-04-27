@@ -53,14 +53,14 @@ void ListePret::enleve(Livre livre_a_supprimer, Adherent adh_a_supprimer ) {
         return;
     }
 
-    if ( livre_a_supprimer.getIsbn() == head->getLivre().getIsbn() && adh_a_supprimer == head->getAdherent()) {
+    if ( livre_a_supprimer.getIsbn() == head->getLivre().getIsbn() && adh_a_supprimer.getId() == head->getAdherent().getId()) {
         Pret* temporaire = head;
         head = head->getSuivant();
         delete temporaire;
     } 
     else {
         Pret* precedent = head;
-        while ( ((precedent != nullptr) && (precedent->getSuivant()->getLivre().getIsbn() != livre_a_supprimer.getIsbn())) && (precedent->getSuivant()->getAdherent() != adh_a_supprimer) ){
+        while ( ((precedent != nullptr) && (precedent->getSuivant()->getLivre().getIsbn() != livre_a_supprimer.getIsbn())) && (precedent->getSuivant()->getAdherent().getId() != adh_a_supprimer.getId()) ){
             precedent = precedent->getSuivant();
         }
 
@@ -90,7 +90,7 @@ void ListePret::affiche() {
         }
 
         current->getLivre().affiche();
-        current->getAdherent().affiche()
+        current->getAdherent().affiche();
     }
 
 }

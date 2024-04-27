@@ -20,6 +20,8 @@ protected:
     /* au vu des autres fonctions demandées il faut peut être faire un argument avec sa biliotheque d'origine*/
 
 public:
+
+    vector<Livre> initialiserVecteurLivres();
             Livre       ()                                                                                          ;
             Livre       (int code, string auteur, string titre, string editeur, string isbn, string etats);
     void    affiche     ()                                                                                          ;
@@ -30,8 +32,6 @@ public:
     string  getIsbn     ()                                                                                          ;
     string  getEtats    ()                                                                                          ;
     string  getCategorie()                                                                                          ;
-    string  getNomBiblioOrigine  ()                                                                                 ;
-    string  getNomBiblioActuel   ()     ;
     void    setCode     (int code)                                                                                  ;
     void    setAuteur   (string auteur)                                                                             ;
     void    setTitre    (string titre)                                                                              ; 

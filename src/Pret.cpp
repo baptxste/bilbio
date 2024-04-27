@@ -31,6 +31,6 @@ void Pret::setLivre(Livre l) {
 void Pret::setAdherent(Adherent a){
     adherent = a;
 }
-void Pret::setSuivant(Noeud* next) {
+void Pret::setSuivant(Pret* next) {
     suivant = next;
 }

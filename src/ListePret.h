@@ -12,7 +12,7 @@ private:
 
 public:
             ListePret  ()                              ;
-            ListePret  (const listePret& liste_pret)  ;
+            ListePret  (const ListePret& liste_pret)  ;
             ~ListePret ()                              ;
     Pret*  getHead     ()                              ;
     void    setHead     (Pret* newHead)                ;

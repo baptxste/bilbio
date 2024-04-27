@@ -30,7 +30,7 @@ void ListePretBib::setHead(PretBib* newhead) {
 
 void ListePretBib::ajoute(Livre l, Bibliotheque b) {
 
-    PretBib* nouveauPret = new Pret(l, a);     // on peut le construire comme ceci comme on le delete dans le destructeur
+    PretBib* nouveauPret = new PretBib(l, b);     // on peut le construire comme ceci comme on le delete dans le destructeur
 
     if( head == nullptr ) {
         nouveauPret->setSuivant(head);
@@ -53,14 +53,14 @@ void ListePretBib::enleve(Livre livre_a_supprimer, Bibliotheque bib_a_supprimer 
         return;
     }
 
-    if ( livre_a_supprimer.getIsbn() == head->getLivre().getIsbn() && adh_a_supprimer == head->getBibliotheque()) {
+    if ( livre_a_supprimer.getIsbn() == head->getLivre().getIsbn() && bib_a_supprimer.getNom() == head->getBibliotheque().getNom()) {
         PretBib* temporaire = head;
         head = head->getSuivant();
         delete temporaire;
     } 
     else {
         PretBib* precedent = head;
-        while ( ((precedent != nullptr) && (precedent->getSuivant()->getLivre().getIsbn() != livre_a_supprimer.getIsbn())) && (precedent->getSuivant()->getBibliotheque() != bib_a_supprimer) ){
+        while ( ((precedent != nullptr) && (precedent->getSuivant()->getLivre().getIsbn() != livre_a_supprimer.getIsbn())) && (precedent->getSuivant()->getBibliotheque().getNom() != bib_a_supprimer.getNom()) ){
             precedent = precedent->getSuivant();
         }
 
@@ -90,7 +90,7 @@ void ListePretBib::affiche() {
         }
 
         current->getLivre().affiche();
-        current->getBibliotheque().affiche()
+        current->getBibliotheque().affiche();
     }
 
 }

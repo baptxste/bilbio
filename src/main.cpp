@@ -1,7 +1,9 @@
 #include"Bibliotheque.h"
+#include"Livre.h"
 #include<iostream>
 #include<string>
 #include<fstream>
+#include<vector>
 
 using namespace std;
 
@@ -21,8 +23,14 @@ using namespace std;
 // juste à emprunter le livre à la bibliotheque a qui on l'a preté
 
 int main (){
+    Livre livres;
+    vector<Livre> listelivres = livres.initialiserVecteurLivres();
 
 
+    for (size_t i=0; i < listelivres.size();++i) {
+        listelivres[i].affiche();
+    }
+    std::cout << std::endl;
 
     return 0;
 }

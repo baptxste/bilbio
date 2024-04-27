@@ -3,9 +3,35 @@
 #include<string>
 #include <vector>
 #include <algorithm>
+#include<fstream>
+#include<sstream>
 
 using namespace std;
 
+
+
+vector<Livre> Livre::initialiserVecteurLivres(){
+    vector<Livre> livres;
+    ifstream fichier("bd/liste_livres");
+    if (fichier.is_open()) {
+        string ligne;
+        while (getline(fichier, ligne)) {
+            stringstream ss(ligne);
+            string code, auteur, titre, editeur, isbn, etats;
+            getline(ss, code, ';');
+            getline(ss, auteur, ';');
+            getline(ss, titre, ';');
+            getline(ss, editeur, ';');
+            getline(ss, isbn, ';');
+            getline(ss, etats, ';');
+            livres.push_back(Livre(stoi(code), auteur, titre, editeur, isbn, etats));
+        }
+        fichier.close();
+    } else {
+        std::cerr << "Erreur : Impossible d'ouvrir le fichier." << std::endl;
+    }
+    return livres;
+}
 
 Livre::Livre(){
 }
@@ -18,9 +44,6 @@ Livre::Livre(int code, string auteur, string titre, string editeur, string isbn,
     this->isbn = isbn;
     this->etats = etats;
     this->categorie = "";
-    this->nomBiblioActuel = "";
-    this->nomBiblioOrigine = "";
-
 }
 
 void Livre::affiche(){
@@ -55,14 +78,6 @@ string Livre::getEtats(){
 }
 string Livre::getCategorie(){
     return categorie;
-}
-
-string Livre::getNomBiblioActuel (){
-    return nomBiblioActuel;
-}
-
-string Livre::getNomBiblioOrigine (){
-    return nomBiblioOrigine;
 }
 
 void Livre::setCode(int c){

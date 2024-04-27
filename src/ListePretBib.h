@@ -12,7 +12,7 @@ private:
 
 public:
             ListePretBib  ()                              ;
-            ListePretBib  (const listePreBibt& liste_pret_bib)  ;
+            ListePretBib  (const ListePretBib& liste_pret_bib)  ;
             ~ListePretBib ()                              ;
     PretBib*  getHead     ()                              ;
     void    setHead     (PretBib* newHead)                ;
