@@ -10,13 +10,12 @@ using namespace std;
 Livre::Livre(){
 }
 
-Livre::Livre(int code, string auteur, string titre, string editeur, string isbn, string public_vise, string etats){
+Livre::Livre(int code, string auteur, string titre, string editeur, string isbn, string etats){
     this->code = code;
     this->auteur = auteur;
     this->titre = titre;
     this->editeur = editeur;
     this->isbn = isbn;
-    this->public_vise = public_vise;
     this->etats = etats;
     this->categorie = "";
     this->nomBiblioActuel = "";
@@ -30,7 +29,6 @@ void Livre::affiche(){
     cout<< "titre : "<< titre <<endl;
     cout<< "editeur : "<< editeur <<endl;
     cout<< "isbn : "<< isbn <<endl;
-    cout<< "public visé : "<< public_vise <<endl;
     cout<< "etats : "<< etats <<endl;
 }
 
@@ -52,9 +50,6 @@ string Livre::getEditeur(){
 string Livre::getIsbn(){
     return this->isbn;
 }
- string Livre::getPublic(){
-    return this->public_vise;
- }
 string Livre::getEtats(){
     return this->etats;
 }
@@ -86,9 +81,6 @@ void Livre::setEditeur(string editeur){
 void Livre::setIsbn(string isbn){
     this->isbn = isbn;
 }                                  
-void Livre::setPublic(string public_vise){
-    this->public_vise = public_vise;
-} 
 void Livre::setEtats(string etats){
     this->etats = etats;
 }         

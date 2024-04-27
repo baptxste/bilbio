@@ -1,7 +1,7 @@
 #ifndef INVENTAIRE_H
 #define INVENTAIRE_H
 
-#include "noeud.h"
+#include "Noeud.h"
 #include "Livre.h"
 
 class Inventaire {

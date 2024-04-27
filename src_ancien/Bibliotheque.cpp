@@ -218,5 +218,3 @@ void Bibliotheque::rendLivre(){
         }
     }
 }
-
-
