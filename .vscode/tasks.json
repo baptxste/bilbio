@@ -22,7 +22,31 @@
                 "isDefault": true
             },
             "detail": "Tâche générée par le débogueur."
+        },
+    
+    {
+        "label": "build",
+        "type": "shell",
+        "command": "make",
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "presentation": {
+            "reveal": "silent"
+        },
+        "problemMatcher": {
+            "owner": "cpp",
+            "fileLocation": ["relative", "${workspaceFolder}"],
+            "pattern": {
+                "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error):\\s+(.*)$",
+                "file": 1,
+                "line": 2,
+                "column": 3,
+                "severity": 4,
+                "message": 5
+            }
         }
-    ],
+    }],
     "version": "2.0.0"
 }

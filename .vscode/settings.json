@@ -5,7 +5,10 @@
         "iostream": "cpp",
         "xutility": "cpp",
         "xstring": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "fstream": "cpp",
+        "liste_romans": "c",
+        "ostream": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

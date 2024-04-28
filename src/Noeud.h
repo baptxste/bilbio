@@ -10,12 +10,12 @@ private:
     Noeud*  suivant;
 
 public: 
-            Noeud       (Livre livre);
-            Noeud       (Livre livre, Noeud* next);
-    Livre   getLivre    ();
-    Noeud*  getSuivant  ();
-    void    setLivre    (Livre livre);
-    void    setSuivant  (Noeud* next);
+            Noeud       (Livre livre);// ok 
+            Noeud       (Livre livre, Noeud* next);// ok
+    Livre   getLivre    ();// ok 
+    Noeud*  getSuivant  ();// ok
+    void    setLivre    (Livre livre);// ok 
+    void    setSuivant  (Noeud* next);// ok
 };
 
 #endif /* NOEUD_H */

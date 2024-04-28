@@ -17,14 +17,13 @@ vector<Livre> Livre::initialiserVecteurLivres(){
         string ligne;
         while (getline(fichier, ligne)) {
             stringstream ss(ligne);
-            string code, auteur, titre, editeur, isbn, etats;
-            getline(ss, code, ';');
+            string auteur, titre, editeur, isbn, etats;
+            getline(ss, isbn, ';');
             getline(ss, auteur, ';');
             getline(ss, titre, ';');
             getline(ss, editeur, ';');
-            getline(ss, isbn, ';');
             getline(ss, etats, ';');
-            livres.push_back(Livre(stoi(code), auteur, titre, editeur, isbn, etats));
+            livres.push_back(Livre(auteur, titre, editeur, isbn, etats));
         }
         fichier.close();
     } else {
@@ -34,10 +33,10 @@ vector<Livre> Livre::initialiserVecteurLivres(){
 }
 
 Livre::Livre(){
+    isbn = "isbn_defaut";
 }
 
-Livre::Livre(int code, string auteur, string titre, string editeur, string isbn, string etats){
-    this->code = code;
+Livre::Livre( string auteur, string titre, string editeur, string isbn, string etats){
     this->auteur = auteur;
     this->titre = titre;
     this->editeur = editeur;

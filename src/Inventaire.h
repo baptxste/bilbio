@@ -10,14 +10,15 @@ private:
     Noeud* head;
 
 public:
-            Inventaire  ()                              ;
-            Inventaire  (const Inventaire& inventaire)  ;
-            ~Inventaire ()                              ;
-    Noeud*  getHead     ()                              ;
-    void    setHead     (Noeud* newHead)                ;
-    void    ajoute      (Livre l)                       ;
-    void    enleve      (Livre livre_a_supprimer)      ;
-    void    affiche     ()                              ;
+            Inventaire  ()                              ;// ok
+            Inventaire  (const Inventaire& inventaire)  ;// ok 
+            ~Inventaire ()                              ;// ok
+    Noeud*  getHead     ()                              ;// ok 
+    void    setHead     (Noeud* newHead)                ;// ok 
+    void    ajoute      (Livre l)                       ; // ok 
+    void    enleve      (Livre livre_a_supprimer)      ; // ok
+    void    affiche     ()                              ; // ok
+    Livre   getLivre( string isbn ); // ok
 };
 
 #endif /* INVENTAIRE_H */

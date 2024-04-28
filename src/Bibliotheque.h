@@ -20,15 +20,19 @@ private:
 
 public:
     vector<Bibliotheque> listeBibliotheque;
-    Bibliotheque();
-    Bibliotheque(string nom, string adresse);
-    string getNom();
-    string getAdresse();
-    Inventaire getInventaire();
-    void setNom(string nom);
-    void setAdresse(string adresse);   
-    void affiche();             
-    friend ostream& operator<<(ostream& out, const Bibliotheque& b);
+    Bibliotheque();// ok 
+    Bibliotheque(string nom, string adresse); // ok 
+    string getNom();// ok 
+    string getAdresse(); // ok 
+    Inventaire getInventaire();// ok 
+    void setInventaire(vector<string> vecisbn);// ok 
+    void setNom(string nom);// ok 
+    void setAdresse(string adresse);// ok 
+    void affiche();// ok 
+    friend ostream& operator<<(ostream& out, const Bibliotheque& b);// ok 
+    void setInventaire(vector<string> isbn, Inventaire tous_leslivres); // ok
+    static vector<Bibliotheque> initialiserVecteurBibliotheque(Inventaire tous_les_livres);// a faire
+    void enregistrerVecteurBibliotheque(vector<Bibliotheque> liste); // a faire
 };
 
 #endif /* BIBLIOTHEQUE_H */

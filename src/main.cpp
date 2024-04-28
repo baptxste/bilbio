@@ -4,6 +4,10 @@
 #include<string>
 #include<fstream>
 #include<vector>
+#include"Roman.h"
+#include"Inventaire.h"
+
+#include"sstream"
 
 using namespace std;
 
@@ -23,14 +27,39 @@ using namespace std;
 // juste à emprunter le livre à la bibliotheque a qui on l'a preté
 
 int main (){
-    Livre livres;
-    vector<Livre> listelivres = livres.initialiserVecteurLivres();
-
-
-    for (size_t i=0; i < listelivres.size();++i) {
-        listelivres[i].affiche();
+    // Roman romans;
+    vector<Roman> listeromans = Roman::initialiserVecteurRomans();
+    for (size_t i=0; i < listeromans.size();++i) {
+        listeromans[i].affiche();
     }
-    std::cout << std::endl;
+
+    Inventaire liste_tous_livres = Inventaire();
+
+    for (size_t i=0; i < listeromans.size();++i) {
+        liste_tous_livres.ajoute(listeromans[i]);
+    }
+
+    cout <<  endl;
+    cout << "test biblio"<< endl;
+
+    Bibliotheque b;
+    // vector<Bibliotheque> listebiblios = b.initialiserVecteurBibliotheque(liste_tous_livres);
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(liste_tous_livres);
+
+    cout <<  endl;
+    cout << "affichage de la liste biblio"<<endl;
+    cout <<  endl;
+    // for( int i=0; i<listebiblios.size();++i){
+    //     cout << listebiblios[i].getNom() << endl;
+    // }
+
+
+    // stringstream liste("isbn1,isbn2");
+    // string isbn;
+    // while(getline(liste, isbn,',')){
+    //     cout << isbn << endl;
+    // }
+
 
     return 0;
 }

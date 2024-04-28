@@ -92,3 +92,23 @@ void Inventaire::affiche() {
     }
 
 }
+
+Livre Inventaire::getLivre(string isbn){
+    Noeud* current = head;
+    while( current->getSuivant() != nullptr){
+        if( current->getLivre().getIsbn() == isbn){
+            return current->getLivre();
+        }
+        else{
+            current =current->getSuivant();
+        }
+    }
+    // dernier élément
+    if( current->getLivre().getIsbn() == isbn){
+        return current->getLivre();
+    }
+    else{
+        cout<< "Attention le livre associé à l'isbn " <<isbn <<"n'existe pas, renvoie un livre vide"<< endl; 
+        return Livre();
+    }
+}

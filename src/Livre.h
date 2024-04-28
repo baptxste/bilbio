@@ -17,13 +17,11 @@ protected:
     string  categorie   ;
     bool    etatExiste (string etatPropose) ;
 
-    /* au vu des autres fonctions demandées il faut peut être faire un argument avec sa biliotheque d'origine*/
-
 public:
 
     vector<Livre> initialiserVecteurLivres();
             Livre       ()                                                                                          ;
-            Livre       (int code, string auteur, string titre, string editeur, string isbn, string etats);
+            Livre       (string auteur, string titre, string editeur, string isbn, string etats);
     void    affiche     ()                                                                                          ;
     int     getCode     ()                                                                                          ;
     string  getAuteur   ()                                                                                          ;
