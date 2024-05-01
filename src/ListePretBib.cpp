@@ -15,7 +15,8 @@ ListePretBib::~ListePretBib() {
     while( current != nullptr ) {
         PretBib* step = current;
         current = current->getSuivant();
-        delete step;
+        // delete step;
+        step->~PretBib();
     }
 }
 

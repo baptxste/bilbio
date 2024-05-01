@@ -20,8 +20,8 @@ bool Bibliotheque::categorieExiste(string cat){
 }
 
 Bibliotheque::Bibliotheque(){
-    nom = "Nom par defaut";
-    adresse = "La ou elle est";
+    nom = "Nom par défaut";
+    adresse = "Adresse apr défaut";
     inventaire = Inventaire();;
 }
 
@@ -42,7 +42,18 @@ string Bibliotheque::getAdresse(){
 Inventaire Bibliotheque::getInventaire(){
     return this->inventaire;
 }
+Livre Bibliotheque::getLivre(int code){
+    Noeud* current = inventaire.getHead();
+    while ( current->getSuivant() != nullptr){
+        if ( current->getLivre().getCode() == code){
+            return current->getLivre();
+        }
+    } 
+    cout <<" le livre code : "<< code<<" n'a pas été trouvé dans la bibliotheque"<< endl;
+    return Livre();
 
+
+}
 void Bibliotheque::setNom(string nom){
     this->nom = nom;
 }
@@ -55,7 +66,7 @@ void Bibliotheque::affiche(){
     inventaire.affiche();
 }
 
-ostream& operator<<(ostream& out, Bibliotheque b){
+ostream& operator<<(ostream& out, Bibliotheque& b){
     out << "nom : ";
     out << b.getNom() << endl; 
     out << "adresse : ";
@@ -109,3 +120,27 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* to
     }
     return bib;
 }
+
+void Bibliotheque::enregistrerVecteurBibliotheque(vector<Bibliotheque> vecbib){
+    fstream fichier("bd/liste_biblios", std::ios::in | std::ios::out);
+    if (fichier.is_open()){
+        for(int i=0; i<vecbib.size();i++){
+            // on récupère la liste des isbn
+            string listeisbn ;
+            Noeud* current = vecbib[i].getInventaire().getHead();
+            if ( current != nullptr ){
+                while ( current->getSuivant() != nullptr ) {
+                    listeisbn += current->getLivre().getIsbn()+",";
+                    current = current->getSuivant();
+                }
+                listeisbn += current->getLivre().getIsbn();
+            }
+            // fin liste isbn
+            fichier << vecbib[i].getNom()<<";"<<vecbib[i].getAdresse()<<";"<<listeisbn<<";"<<endl;
+
+        }
+    }
+    fichier.close();
+}
+
+

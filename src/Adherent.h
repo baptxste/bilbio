@@ -2,8 +2,11 @@
 #define ADHERENT_H
 
 #include <iostream>
+#include<vector>
+
 #include "Bibliotheque.h"
 #include "Inventaire.h"
+
 
 using namespace std;
 
@@ -18,11 +21,12 @@ private:
     Bibliotheque    bibliotheque    ;
     int             nb_emprunt_en_cours;
     bool            peutEmpruter();
-    Inventaire      liste_emprunt_en_cours;
+    Inventaire      liste_emprunt_en_cours; // liste des codes des livres empruntés dans sa bilbiothèque
 
 public:
                     Adherent();
-                    Adherent(string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque)  ;
+                    Adherent(string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque)  ; // ok
+                    Adherent(int id_adherent, string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque, Inventaire liste_emprunt); // ok
                     ~Adherent();
     string          getNom()                                                                                                            ;
     string          getprenom()                                                                                                         ;
@@ -30,14 +34,16 @@ public:
     int             getId()                                                                                                             ;
     int             getNbEmpruntMax()                                                                                                   ;
     Bibliotheque    getBibliotheque()                                                                                                   ;
+    Inventaire      getEmprunts();
     void            setNom(string nom)                                                                                                  ;
     void            setPrenom(string prenom)                                                                                            ;
     void            setAdresse(string adresse)                                                                                          ;
     void            setId(int id_adherent)                                                                                              ;
     void            setNbEmpruntMax(int nb_emprunt_max)                                                                                 ;
     void            setBibliotheque(Bibliotheque bibliotheque)                                                                          ;
-    friend ostream& operator<<(ostream& out, const Adherent& a)                                                                         ;
+    friend ostream& operator<<(ostream& out, const Adherent& a)                                                                         ; // ok
     void            affiche();
+    static vector<Adherent> initListeAdherent(vector<Bibliotheque> liste_biblio); // a tester 
 };
 
 #endif /* ADHERENT_H */

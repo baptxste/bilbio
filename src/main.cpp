@@ -6,7 +6,7 @@
 #include<vector>
 #include"Roman.h"
 #include"Inventaire.h"
-
+#include"Adherent.h"
 #include"sstream"
 
 using namespace std;
@@ -26,42 +26,55 @@ using namespace std;
 // si on fait les choses comme ca, la fonction rendre un livre reviendra presque 
 // juste à emprunter le livre à la bibliotheque a qui on l'a preté
 
-int main (){
-    // Roman romans;
-    vector<Roman> listeromans = Roman::initialiserVecteurRomans();
-    for (size_t i=0; i < listeromans.size();++i) {
-        listeromans[i].affiche();
-    }
-
+Inventaire initLivres(){
     Inventaire liste_tous_livres = Inventaire();
 
+    vector<Roman> listeromans = Roman::initialiserVecteurRomans();
     for (size_t i=0; i < listeromans.size();++i) {
         liste_tous_livres.ajoute(listeromans[i]);
     }
+    // repeter ces étapes pour les autres catégories
+    return liste_tous_livres;
+}
+//vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+void menu(){
+    bool continuer = true;
+    int choix = 0;
+    do{
+        cout << "===== Menu =====" << endl;
+        cout << "1) " << endl;
+        cout << "2) " << endl;
+        cout << "3) " << endl;
 
-    cout <<  endl;
-    cout << "test biblio"<< endl;
+        cout << "Votre choix : ";
+        cin >> choix;
+        switch(choix){
+            case 1:
+                //afficherBiblios();
+                break;
+            case 2:
+                //tests();
+                break;
+            case 3:
+                //fixture();
+                break;
+            default:
+                cout << endl <<  "#### Choix invalide." << endl;
+        }
+        cout << endl;
+    }while(continuer);
 
-    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+}
+int main (){
+    Inventaire liste_tous_livre =initLivres();
+    Bibliotheque b = Bibliotheque();
+    b.setAdresse("adrrdess");
+    b.setNom("noma");
+    cout <<b ;
 
-    cout <<  endl;
-    cout << "affichage de la liste biblio"<<endl;
-    cout <<  endl;
-    for( int i=0; i<listebiblios.size();++i){
-        cout << listebiblios[i].getNom() << endl;
-        listebiblios[i].getInventaire().affiche();
-    }
-    vector<string> vecisbn;
-    vecisbn.push_back("isbn1");
-    vecisbn.push_back("isbn1");
-    listebiblios[0].setInventaire(vecisbn,&liste_tous_livres);
+    Adherent a1 = Adherent(24, "jean", "jacques","rua",10,b,liste_tous_livre);
 
-    cout <<"après les modifs" <<endl;
-    for( int i=0; i<listebiblios.size();++i){
-        cout << listebiblios[i].getNom() << endl;
-        listebiblios[i].getInventaire().affiche();
-    }
-
+    a1.getEmprunts().affiche();
 
     return 0;
 }

@@ -13,7 +13,8 @@ public:
             Noeud       (Livre livre);// ok 
             Noeud       (Livre livre, Noeud* next);// ok
             ~Noeud();
-    Livre*   getLivre    ();// ok 
+    Livre*   getAdresseLivre    ();// ok 
+    Livre    getLivre();
     Noeud*  getSuivant  ();// ok
     void    setLivre    (Livre livre);// ok 
     void    setSuivant  (Noeud* next);// ok

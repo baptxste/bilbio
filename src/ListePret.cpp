@@ -15,7 +15,8 @@ ListePret::~ListePret() {
     while( current != nullptr ) {
         Pret* step = current;
         current = current->getSuivant();
-        delete step;
+        // delete step;
+        step->~Pret();
     }
 }
 

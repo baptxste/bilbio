@@ -2,12 +2,15 @@
 #include "Bibliotheque.h"
 #include<iostream>
 #include<string>
+#include<vector>
+#include<sstream>
+#include<fstream>
 
 int Adherent::nb_adherent = 0;
 
 Adherent::Adherent(){
-
 }
+
 Adherent::Adherent(string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque){
     this->nom = nom;
     this->prenom = prenom;
@@ -16,6 +19,13 @@ Adherent::Adherent(string nom, string prenom, string adresse, int nb_emprunt_max
     this->bibliotheque = bibliotheque;
     nb_emprunt_en_cours = 0;
     nb_adherent++;
+    this->liste_emprunt_en_cours = Inventaire();
+}
+
+Adherent::Adherent(int id_adherent, string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque, Inventaire inv){
+    Adherent(nom,prenom, adresse, nb_emprunt_max, bibliotheque);
+    this->id_adherent = id_adherent;
+    this->liste_emprunt_en_cours = inv;
 }
 
 Adherent::~Adherent(){
@@ -44,6 +54,10 @@ int Adherent::getNbEmpruntMax(){
 
 Bibliotheque Adherent::getBibliotheque(){
     return this->bibliotheque;
+}
+
+Inventaire Adherent::getEmprunts(){
+    return this->liste_emprunt_en_cours;
 }
 
 void Adherent::setNom(string nom){
@@ -93,7 +107,64 @@ bool Adherent::peutEmpruter(){
         return false;
     }
 }
+
 void Adherent::affiche(){
     cout <<this->nom<<endl;
     cout<<this->prenom<<endl;
+}
+
+vector<Adherent> Adherent::initListeAdherent(vector<Bibliotheque> listebiblios){
+    vector<Adherent> adhs;
+    ifstream fichier("bd/adherents/liste_adherents");
+    if (fichier.is_open()) {
+        string ligne;
+        while (getline(fichier, ligne)) {
+            stringstream ss(ligne);
+            string id, nom, prenom, adresse, nb_emprunt_max, biblio,liste_emprunt;
+            getline(ss, id, ';');
+            getline(ss, nom, ';');
+            getline(ss, prenom, ';');
+            getline(ss, adresse, ';');
+            getline(ss, nb_emprunt_max, ';');
+            getline(ss, biblio, ';');
+            getline(ss, liste_emprunt, ';');
+            // on récupère l'objet bibliotheque 
+            Bibliotheque bib;
+            bool bibexiste =false;
+            for (int i=0; i<listebiblios.size();++i){
+                if( listebiblios[i].getNom() == biblio){
+                    bib  = listebiblios[i];
+                    bibexiste = true;
+                    break;
+                }
+            }
+            if(!bibexiste){
+                cout << "Attention la bibliothèque "<< biblio <<" utilisée pour crée l'adhérent " << nom <<" "<< prenom <<" n'existe pas, ajout d'une bibliothèque par défaut."<<endl;
+                bib = Bibliotheque();
+            }
+            // liste des emprunts
+            Inventaire emprunts;
+            if (liste_emprunt.empty()){
+                emprunts =Inventaire();
+            }
+            else{
+                Inventaire invbiblio  = bib.getInventaire();
+                vector<int> veccode;
+                stringstream sscode(liste_emprunt);
+                string code;
+                while(getline(sscode, code,',')){
+                    veccode.push_back(stoi(code));
+                }
+                for(int i=0; veccode.size(); ++i){
+                    emprunts.ajoute( bib.getLivre(veccode[i]));
+                }
+            }
+            adhs.push_back(Adherent(stoi(id),nom,prenom,adresse,stoi(nb_emprunt_max),bib,emprunts));
+        }
+        fichier.close();
+    } else {
+        std::cerr << "Erreur : Impossible d'ouvrir le fichier." << std::endl;
+    }
+    return adhs;
+
 }

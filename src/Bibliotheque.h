@@ -24,15 +24,15 @@ public:
     Bibliotheque(string nom, string adresse); // ok 
     string getNom();// ok 
     string getAdresse(); // ok 
-    Inventaire getInventaire();// ok 
-    void setInventaire(vector<string> vecisbn);// ok 
+    Inventaire getInventaire();// ok s
+    Livre getLivre(int code);
     void setNom(string nom);// ok 
     void setAdresse(string adresse);// ok 
     void affiche();// ok 
-    friend ostream& operator<<(ostream& out, const Bibliotheque& b);// ok 
+    friend ostream& operator<<(ostream& out, Bibliotheque& b);// ok 
     void setInventaire(vector<string> isbn, Inventaire* tous_leslivres); // ok
     static vector<Bibliotheque> initialiserVecteurBibliotheque(Inventaire* tous_les_livres);// ok
-    void enregistrerVecteurBibliotheque(vector<Bibliotheque> liste); // a faire
+    static void enregistrerVecteurBibliotheque(vector<Bibliotheque> liste); //ok
 };
 
 #endif /* BIBLIOTHEQUE_H */

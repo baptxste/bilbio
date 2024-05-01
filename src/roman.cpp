@@ -25,7 +25,7 @@ void    Roman::affiche (){
 }
 vector<Roman> Roman::initialiserVecteurRomans(){
     vector<Roman> romans;
-    ifstream fichier("bd/liste_romans");
+    ifstream fichier("bd/livres/liste_romans");
     if (fichier.is_open()) {
         string ligne;
         while (getline(fichier, ligne)) {
@@ -47,7 +47,7 @@ vector<Roman> Roman::initialiserVecteurRomans(){
 }
 
 void    Roman::enregistrerVecteurRomans(vector<Roman> liste){
-    fstream fichier("bd/liste_romans", std::ios::in | std::ios::out );
+    fstream fichier("bd/livres/liste_romans", std::ios::in | std::ios::out );
     if (fichier.is_open()) {
         for (size_t i=0; i < liste.size();++i) {
                 fichier <<liste[i].getIsbn()<<";"<<liste[i].getAuteur()<<";"<<liste[i].getTitre()<<";"<<liste[i].getEditeur()<<";"<<liste[i].getEtats()<<";"<<liste[i].getGenre()<<";" << std::endl;

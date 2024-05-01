@@ -13,8 +13,11 @@ Noeud::Noeud(Livre l, Noeud* next) {
 Noeud::~Noeud(){
 
 }
-Livre* Noeud::getLivre() {
+Livre* Noeud::getAdresseLivre() {
     return &livre;
+}
+Livre Noeud::getLivre(){
+    return livre;
 }
 
 Noeud* Noeud::getSuivant() {
