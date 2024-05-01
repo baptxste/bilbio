@@ -42,23 +42,25 @@ int main (){
     cout <<  endl;
     cout << "test biblio"<< endl;
 
-    Bibliotheque b;
-    // vector<Bibliotheque> listebiblios = b.initialiserVecteurBibliotheque(liste_tous_livres);
-    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(liste_tous_livres);
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
 
     cout <<  endl;
     cout << "affichage de la liste biblio"<<endl;
     cout <<  endl;
-    // for( int i=0; i<listebiblios.size();++i){
-    //     cout << listebiblios[i].getNom() << endl;
-    // }
+    for( int i=0; i<listebiblios.size();++i){
+        cout << listebiblios[i].getNom() << endl;
+        listebiblios[i].getInventaire().affiche();
+    }
+    vector<string> vecisbn;
+    vecisbn.push_back("isbn1");
+    vecisbn.push_back("isbn1");
+    listebiblios[0].setInventaire(vecisbn,&liste_tous_livres);
 
-
-    // stringstream liste("isbn1,isbn2");
-    // string isbn;
-    // while(getline(liste, isbn,',')){
-    //     cout << isbn << endl;
-    // }
+    cout <<"après les modifs" <<endl;
+    for( int i=0; i<listebiblios.size();++i){
+        cout << listebiblios[i].getNom() << endl;
+        listebiblios[i].getInventaire().affiche();
+    }
 
 
     return 0;

@@ -2,6 +2,7 @@
 #define LIVRE_H
 
 #include <iostream>
+#include<vector>
 
 using namespace std;
 
@@ -22,6 +23,7 @@ public:
     vector<Livre> initialiserVecteurLivres();
             Livre       ()                                                                                          ;
             Livre       (string auteur, string titre, string editeur, string isbn, string etats);
+            ~Livre();
     void    affiche     ()                                                                                          ;
     int     getCode     ()                                                                                          ;
     string  getAuteur   ()                                                                                          ;

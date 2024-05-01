@@ -18,7 +18,7 @@ public:
     void    ajoute      (Livre l)                       ; // ok 
     void    enleve      (Livre livre_a_supprimer)      ; // ok
     void    affiche     ()                              ; // ok
-    Livre   getLivre( string isbn ); // ok
+    Livre*   getLivre( string isbn ); // ok
 };
 
 #endif /* INVENTAIRE_H */

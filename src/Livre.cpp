@@ -44,7 +44,9 @@ Livre::Livre( string auteur, string titre, string editeur, string isbn, string e
     this->etats = etats;
     this->categorie = "";
 }
-
+Livre::~Livre(){
+    
+}
 void Livre::affiche(){
     cout<< "\ncode : "<< code <<endl;
     cout<< "auteur : "<< auteur <<endl;

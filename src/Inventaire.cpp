@@ -15,7 +15,7 @@ Inventaire::~Inventaire() {
     while( current != nullptr ) {
         Noeud* step = current;
         current = current->getSuivant();
-        delete step;
+        step->~Noeud();
     }
 }
 
@@ -53,14 +53,14 @@ void Inventaire::enleve(Livre livre_a_supprimer) {
         return;
     }
 
-    if ( livre_a_supprimer.getIsbn() == head->getLivre().getIsbn() ) {
+    if ( livre_a_supprimer.getIsbn() == head->getLivre()->getIsbn() ) {
         Noeud* temporaire = head;
         head = head->getSuivant();
         delete temporaire;
     } 
     else {
         Noeud* precedent = head;
-        while ( (precedent != nullptr) && (precedent->getSuivant()->getLivre().getIsbn() != livre_a_supprimer.getIsbn()) ){
+        while ( (precedent != nullptr) && (precedent->getSuivant()->getLivre()->getIsbn() != livre_a_supprimer.getIsbn()) ){
             precedent = precedent->getSuivant();
         }
 
@@ -84,19 +84,19 @@ void Inventaire::affiche() {
 
     else {
         while ( current->getSuivant() != nullptr ) {
-            current->getLivre().affiche();
+            current->getLivre()->affiche();
             current = current->getSuivant();
         }
 
-        current->getLivre().affiche();
+        current->getLivre()->affiche();
     }
 
 }
 
-Livre Inventaire::getLivre(string isbn){
+Livre* Inventaire::getLivre(string isbn){
     Noeud* current = head;
     while( current->getSuivant() != nullptr){
-        if( current->getLivre().getIsbn() == isbn){
+        if( current->getLivre()->getIsbn() == isbn){
             return current->getLivre();
         }
         else{
@@ -104,11 +104,11 @@ Livre Inventaire::getLivre(string isbn){
         }
     }
     // dernier élément
-    if( current->getLivre().getIsbn() == isbn){
+    if( current->getLivre()->getIsbn() == isbn){
         return current->getLivre();
     }
     else{
         cout<< "Attention le livre associé à l'isbn " <<isbn <<"n'existe pas, renvoie un livre vide"<< endl; 
-        return Livre();
+        return new Livre();
     }
 }

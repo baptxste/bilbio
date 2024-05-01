@@ -30,8 +30,8 @@ public:
     void setAdresse(string adresse);// ok 
     void affiche();// ok 
     friend ostream& operator<<(ostream& out, const Bibliotheque& b);// ok 
-    void setInventaire(vector<string> isbn, Inventaire tous_leslivres); // ok
-    static vector<Bibliotheque> initialiserVecteurBibliotheque(Inventaire tous_les_livres);// a faire
+    void setInventaire(vector<string> isbn, Inventaire* tous_leslivres); // ok
+    static vector<Bibliotheque> initialiserVecteurBibliotheque(Inventaire* tous_les_livres);// ok
     void enregistrerVecteurBibliotheque(vector<Bibliotheque> liste); // a faire
 };
 

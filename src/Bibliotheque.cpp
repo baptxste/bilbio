@@ -63,19 +63,20 @@ ostream& operator<<(ostream& out, Bibliotheque b){
     return out;
 }
 
-void Bibliotheque::setInventaire(vector<string> vecisbn, Inventaire tous_les_livres){
+void Bibliotheque::setInventaire(vector<string> vecisbn, Inventaire* tous_les_livres){
     for (int i=0; i<vecisbn.size();++i){
-        Livre l = tous_les_livres.getLivre(vecisbn[i]);
+        Livre* l = tous_les_livres->getLivre(vecisbn[i]);
         // on vérifie que le livre existe bien i.e. isbn non défaut
-        if (l.getIsbn() !="isbn_defaut"){
-            inventaire.ajoute(l);
+        if (l->getIsbn() !="isbn_defaut"){
+            Livre liv = *l;
+            inventaire.ajoute(liv);
         }
         else{
             cout <<"l'isbn : '"<<vecisbn[i] << "' ne correstpond à aucun livre existant"<<endl;
         }
     }
 }
-vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire tous_les_livres){
+vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* tous_les_livres){
     vector<Bibliotheque> bib;
     ifstream fichier("bd/liste_biblios");
     if (fichier.is_open()){
@@ -97,7 +98,6 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire tou
                 while(getline(ssisbn, isbn,',')){
                     vecisbn.push_back(isbn);
                 }
-                cout <<"ok"<<endl;
                 Bibliotheque b = Bibliotheque(nom, adresse);
                 b.setInventaire(vecisbn, tous_les_livres);
                 bib.push_back(b);
@@ -106,11 +106,6 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire tou
     fichier.close();
     }else{
         cerr << "Erreur : Impossible d'ouvrir le fichier." << std::endl;
-    }
-    cout << "init ok"<< endl;
-    for( int i=0; i<bib.size();++i){
-    //    bib[i].affiche();
-        cout << bib[i].getNom() << endl;
     }
     return bib;
 }

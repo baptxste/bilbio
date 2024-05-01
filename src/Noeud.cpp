@@ -10,9 +10,11 @@ Noeud::Noeud(Livre l, Noeud* next) {
     livre = l;
     suivant = next;
 }
+Noeud::~Noeud(){
 
-Livre Noeud::getLivre() {
-    return livre;
+}
+Livre* Noeud::getLivre() {
+    return &livre;
 }
 
 Noeud* Noeud::getSuivant() {
