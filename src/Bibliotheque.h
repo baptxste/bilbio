@@ -24,8 +24,8 @@ public:
     Bibliotheque(string nom, string adresse); // ok 
     string getNom();// ok 
     string getAdresse(); // ok 
-    Inventaire getInventaire();// ok s
-    Livre getLivre(int code);
+    Inventaire getInventaire();// ok 
+    Livre getLivre(int code); // ok
     void setNom(string nom);// ok 
     void setAdresse(string adresse);// ok 
     void affiche();// ok 

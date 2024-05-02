@@ -36,7 +36,7 @@ Inventaire initLivres(){
     // repeter ces étapes pour les autres catégories
     return liste_tous_livres;
 }
-//vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+// vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
 void menu(){
     bool continuer = true;
     int choix = 0;
@@ -66,15 +66,21 @@ void menu(){
 
 }
 int main (){
-    Inventaire liste_tous_livre =initLivres();
-    Bibliotheque b = Bibliotheque();
-    b.setAdresse("adrrdess");
-    b.setNom("noma");
-    cout <<b ;
+    Inventaire liste_tous_livres =initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
 
-    Adherent a1 = Adherent(24, "jean", "jacques","rua",10,b,liste_tous_livre);
+    
+    // Adherent a1 = Adherent(24, "jean", "jacques","rua",10,b,liste_tous_livres); // pb avec l'inventaire ( pas de code pour les livres)
+    // a1.getEmprunts().affiche();
 
-    a1.getEmprunts().affiche();
+    
+    vector<Adherent> listeadherents = Adherent::initListeAdherent(listebiblios); 
+    
+    
+    Adherent a = listeadherents[0];
+    cout << a ;
+    a.getEmprunts().affiche(); // surement pb avec le constructeur de adherent 
+
 
     return 0;
 }

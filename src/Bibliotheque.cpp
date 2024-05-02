@@ -44,10 +44,11 @@ Inventaire Bibliotheque::getInventaire(){
 }
 Livre Bibliotheque::getLivre(int code){
     Noeud* current = inventaire.getHead();
-    while ( current->getSuivant() != nullptr){
+    while ( current != nullptr){
         if ( current->getLivre().getCode() == code){
             return current->getLivre();
         }
+        current = current->getSuivant();
     } 
     cout <<" le livre code : "<< code<<" n'a pas été trouvé dans la bibliotheque"<< endl;
     return Livre();
@@ -75,11 +76,14 @@ ostream& operator<<(ostream& out, Bibliotheque& b){
 }
 
 void Bibliotheque::setInventaire(vector<string> vecisbn, Inventaire* tous_les_livres){
+    int j = 0;
     for (int i=0; i<vecisbn.size();++i){
         Livre* l = tous_les_livres->getLivre(vecisbn[i]);
         // on vérifie que le livre existe bien i.e. isbn non défaut
         if (l->getIsbn() !="isbn_defaut"){
             Livre liv = *l;
+            liv.setCode(j);
+            j++;
             inventaire.ajoute(liv);
         }
         else{

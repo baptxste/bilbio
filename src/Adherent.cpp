@@ -155,8 +155,8 @@ vector<Adherent> Adherent::initListeAdherent(vector<Bibliotheque> listebiblios){
                 while(getline(sscode, code,',')){
                     veccode.push_back(stoi(code));
                 }
-                for(int i=0; veccode.size(); ++i){
-                    emprunts.ajoute( bib.getLivre(veccode[i]));
+                for(int i=0; i<veccode.size(); ++i){
+                    emprunts.ajoute(bib.getLivre(veccode[i]));
                 }
             }
             adhs.push_back(Adherent(stoi(id),nom,prenom,adresse,stoi(nb_emprunt_max),bib,emprunts));
@@ -168,3 +168,4 @@ vector<Adherent> Adherent::initListeAdherent(vector<Bibliotheque> listebiblios){
     return adhs;
 
 }
+
