@@ -29,7 +29,7 @@ public:
                     Adherent(int id_adherent, string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque, Inventaire liste_emprunt); // ok
                     ~Adherent();
     string          getNom()                                                                                                            ;
-    string          getprenom()                                                                                                         ;
+    string          getPrenom()                                                                                                         ;
     string          getAdresse()                                                                                                        ;
     int             getId()                                                                                                             ;
     int             getNbEmpruntMax()                                                                                                   ;
@@ -43,7 +43,8 @@ public:
     void            setBibliotheque(Bibliotheque bibliotheque)                                                                          ;
     friend ostream& operator<<(ostream& out, const Adherent& a)                                                                         ; // ok
     void            affiche();
-    static vector<Adherent> initListeAdherent(vector<Bibliotheque> liste_biblio); // a tester 
+    static vector<Adherent> initVecteurAdherent(vector<Bibliotheque> liste_biblio); // semble marcher à tester en profondeur
+    static void enregistrerVecteurAdherent(vector<Adherent> listeadh );
 };
 
 #endif /* ADHERENT_H */

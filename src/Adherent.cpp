@@ -14,6 +14,7 @@ Adherent::Adherent(){
 Adherent::Adherent(string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque){
     this->nom = nom;
     this->prenom = prenom;
+    this->adresse = adresse;
     this->id_adherent = nb_adherent;
     this->nb_emprunt_max = nb_emprunt_max;
     this->bibliotheque = bibliotheque;
@@ -22,8 +23,7 @@ Adherent::Adherent(string nom, string prenom, string adresse, int nb_emprunt_max
     this->liste_emprunt_en_cours = Inventaire();
 }
 
-Adherent::Adherent(int id_adherent, string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque, Inventaire inv){
-    Adherent(nom,prenom, adresse, nb_emprunt_max, bibliotheque);
+Adherent::Adherent(int id_adherent, string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque, Inventaire inv) : Adherent(nom,prenom, adresse, nb_emprunt_max, bibliotheque){
     this->id_adherent = id_adherent;
     this->liste_emprunt_en_cours = inv;
 }
@@ -36,7 +36,7 @@ string Adherent::getNom(){
     return this->nom;
 }
 
-string Adherent::getprenom(){
+string Adherent::getPrenom(){
     return this->prenom;
 }
 
@@ -110,10 +110,11 @@ bool Adherent::peutEmpruter(){
 
 void Adherent::affiche(){
     cout <<this->nom<<endl;
-    cout<<this->prenom<<endl;
+    cout <<this->prenom<<endl;
+    cout << this->adresse << endl;
 }
 
-vector<Adherent> Adherent::initListeAdherent(vector<Bibliotheque> listebiblios){
+vector<Adherent> Adherent::initVecteurAdherent(vector<Bibliotheque> listebiblios){
     vector<Adherent> adhs;
     ifstream fichier("bd/adherents/liste_adherents");
     if (fichier.is_open()) {
@@ -169,3 +170,25 @@ vector<Adherent> Adherent::initListeAdherent(vector<Bibliotheque> listebiblios){
 
 }
 
+void Adherent::enregistrerVecteurAdherent(vector<Adherent> listeadh){
+    fstream fichier("bd/adherents/liste_adherents", std::ios::in | std::ios::out);
+    if (fichier.is_open()){
+        for( int i = 0; i<listeadh.size();++i){
+            // on récupère les codes des emprunts
+            string listecodes;
+            Noeud* current = listeadh[i].getEmprunts().getHead();
+            while(current!=nullptr){
+                listecodes += to_string(current->getLivre().getCode())+","; //to_string pour éviter le warning de la conversion de l'int
+                current = current->getSuivant();
+            }
+
+            fichier << listeadh[i].getId()<<";"<<listeadh[i].getNom()<<";"<<listeadh[i].getPrenom()<<";"<<listeadh[i].getAdresse()<<";"<<listeadh[i].getNbEmpruntMax()<<";"<<listeadh[i].getBibliotheque().getNom()<<";"<<listecodes<<";"<<endl;
+
+        }
+        fichier.close();
+    }
+    else
+    {
+        cout << "Erreur lors de l'écriture des adhérents"<<endl;
+    }
+}

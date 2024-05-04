@@ -42,6 +42,7 @@ string Bibliotheque::getAdresse(){
 Inventaire Bibliotheque::getInventaire(){
     return this->inventaire;
 }
+
 Livre Bibliotheque::getLivre(int code){
     Noeud* current = inventaire.getHead();
     while ( current != nullptr){
@@ -55,6 +56,7 @@ Livre Bibliotheque::getLivre(int code){
 
 
 }
+
 void Bibliotheque::setNom(string nom){
     this->nom = nom;
 }
@@ -62,6 +64,7 @@ void Bibliotheque::setNom(string nom){
 void Bibliotheque::setAdresse(string adresse){
     this->adresse = adresse;
 }
+
 void Bibliotheque::affiche(){
     cout<<"nom : "<< this->nom << "adresse : " << this->adresse << endl;
     inventaire.affiche();
@@ -91,6 +94,7 @@ void Bibliotheque::setInventaire(vector<string> vecisbn, Inventaire* tous_les_li
         }
     }
 }
+
 vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* tous_les_livres){
     vector<Bibliotheque> bib;
     ifstream fichier("bd/liste_biblios");

@@ -7,7 +7,8 @@
 #include"Roman.h"
 #include"Inventaire.h"
 #include"Adherent.h"
-#include"sstream"
+#include<sstream>
+
 
 using namespace std;
 
@@ -36,13 +37,65 @@ Inventaire initLivres(){
     // repeter ces étapes pour les autres catégories
     return liste_tous_livres;
 }
+void creerNouvelleBiblio(){
+    Inventaire liste_tous_livres = initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    cout << "Pour créer une nouvelle bliotheque veuillez entrer ces informations :"<< endl;
+    string nom, adresse;
+    cout << "Nom :";
+    cin >> nom;
+    cout <<"Adresse : ";
+    cin >> adresse;
+    Bibliotheque b = Bibliotheque(nom,adresse);
+    // ajout de livre à la bibliothèque
+    string reponse;
+    cout << "Voulez vous ajouter des livres à cette bibliothèque ?(oui/non)"<< endl;
+    cin >> reponse;
+    if(reponse == "oui"){
+        string ssisbn;
+        cout << "Entrez la liste des isbn à ajouter à la bibliotèque. (si plusieurs séparer par une virgule)"<<endl;
+        cin >>ssisbn;
+        vector<string> vecisbnverifie;
+        // on vérifie que ces isbn existent bien dans la liste de tous les livres connus.
+        vector<string> vecisbn;
+        string isbn;
+        stringstream ss(ssisbn);
+        while(getline(ss, isbn,',')){
+            vecisbn.push_back(isbn);
+        }
+        for( int i = 0; i<vecisbn.size();++i){
+            bool existe = false;
+            Noeud* current = liste_tous_livres.getHead();
+            while( current != nullptr){
+                if (current->getLivre().getIsbn() == vecisbn[i]){
+                    vecisbnverifie.push_back(vecisbn[i]);
+                    existe = true;
+                    break;
+                }
+                else{
+                    current = current->getSuivant();
+                }
+            }
+            if (existe == false){
+                cout<< " Attention l'isbn :"<< vecisbn[i]<< "n'existe pas et n'est donc pas ajouté à la bilbiothèque."<<endl;
+            }
+        }
+        b.setInventaire(vecisbnverifie,&liste_tous_livres);
+        listebiblios.push_back(b);
+    }   
+    else{
+        listebiblios.push_back(b);
+    }
+    Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
+    cout << " Bibliotheque bien enregistrée."<<endl;
+}
 // vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
 void menu(){
     bool continuer = true;
     int choix = 0;
     do{
         cout << "===== Menu =====" << endl;
-        cout << "1) " << endl;
+        cout << "1) Créer une nouvelle bibliothèque" << endl;
         cout << "2) " << endl;
         cout << "3) " << endl;
 
@@ -50,7 +103,7 @@ void menu(){
         cin >> choix;
         switch(choix){
             case 1:
-                //afficherBiblios();
+                creerNouvelleBiblio();
                 break;
             case 2:
                 //tests();
@@ -66,21 +119,10 @@ void menu(){
 
 }
 int main (){
-    Inventaire liste_tous_livres =initLivres();
-    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
-
-    
-    // Adherent a1 = Adherent(24, "jean", "jacques","rua",10,b,liste_tous_livres); // pb avec l'inventaire ( pas de code pour les livres)
-    // a1.getEmprunts().affiche();
-
-    
-    vector<Adherent> listeadherents = Adherent::initListeAdherent(listebiblios); 
-    
-    
-    Adherent a = listeadherents[0];
-    cout << a ;
-    a.getEmprunts().affiche(); // surement pb avec le constructeur de adherent 
-
+    // Inventaire liste_tous_livres =initLivres();
+    // vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(listebiblios);
+    creerNouvelleBiblio();
 
     return 0;
 }
