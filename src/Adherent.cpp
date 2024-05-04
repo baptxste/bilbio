@@ -103,7 +103,8 @@ bool Adherent::peutEmpruter(){
         return true;
     }
     else{
-        cout<<"l'adhérent a emprunté trop de livre";
+        cout<<"l'adhérent a emprunté trop de livre"<<endl;
+        cout <<" refus de l'emprunt"<< endl;
         return false;
     }
 }
@@ -112,6 +113,34 @@ void Adherent::affiche(){
     cout <<this->nom<<endl;
     cout <<this->prenom<<endl;
     cout << this->adresse << endl;
+}
+
+void Adherent::emprunte(int code){
+    if(peutEmpruter()){
+        // vérifier que le livre est libre
+        Inventaire inv = bibliotheque.getInventaire();
+        Noeud* current = inv.getHead();
+        bool livretrouve = false;
+        while(current!=nullptr){
+            if(current->getAdresseLivre()->getCode() == code){
+                if (current->getAdresseLivre()->getEtats() == "libre"){
+                    liste_emprunt_en_cours.ajoute(current->getLivre());
+                    current->getAdresseLivre()->setEtats("emprunté");
+                    livretrouve = true;
+                    bibliotheque.ajouterPret(code,this);
+                    cout << "Livre emprunté."<<endl;
+                    break;
+                }
+            }
+            else{
+                current = current->getSuivant();
+            }
+        }
+        if(!livretrouve){
+            cout<<"L'emprunt n'a pas été effectué"<<endl;
+            cout<<"Le livre n'est pas disponible ou n'existe pas."<<endl;
+        }
+    }
 }
 
 vector<Adherent> Adherent::initVecteurAdherent(vector<Bibliotheque> listebiblios){

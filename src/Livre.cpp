@@ -44,9 +44,11 @@ Livre::Livre( string auteur, string titre, string editeur, string isbn, string e
     this->etats = etats;
     this->categorie = "";
 }
+
 Livre::~Livre(){
     
 }
+
 void Livre::affiche(){
     cout<< "\ncode : "<< code <<endl;
     cout<< "auteur : "<< auteur <<endl;
@@ -67,6 +69,7 @@ string Livre::getAuteur(){
 string Livre::getTitre(){
     return this->titre;
 }
+
 string Livre::getEditeur(){
     return this->editeur;
 }
@@ -74,9 +77,11 @@ string Livre::getEditeur(){
 string Livre::getIsbn(){
     return this->isbn;
 }
+
 string Livre::getEtats(){
     return this->etats;
 }
+
 string Livre::getCategorie(){
     return categorie;
 }
@@ -88,18 +93,23 @@ void Livre::setCode(int c){
 void Livre::setAuteur(string auteur){
     this->auteur = auteur;
 }                                                                            
+
 void Livre::setTitre(string titre){
     this->titre = titre;
 }                                                                            
+
 void Livre::setEditeur(string editeur){
     this->editeur = editeur;
 }    
+
 void Livre::setIsbn(string isbn){
     this->isbn = isbn;
 }                                  
+
 void Livre::setEtats(string etats){
     this->etats = etats;
 }         
+
 void Livre::setCategorie(string categorie){
     this->categorie = categorie;
 }

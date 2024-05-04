@@ -57,6 +57,10 @@ Livre Bibliotheque::getLivre(int code){
 
 }
 
+vector<tuple<int, Adherent*>> Bibliotheque::getPretAdherent(){
+    return this->listepretAdherent;
+}
+
 void Bibliotheque::setNom(string nom){
     this->nom = nom;
 }
@@ -68,6 +72,11 @@ void Bibliotheque::setAdresse(string adresse){
 void Bibliotheque::affiche(){
     cout<<"nom : "<< this->nom << "adresse : " << this->adresse << endl;
     inventaire.affiche();
+}
+
+void Bibliotheque::ajouterPret(int code, Adherent* adh){
+    tuple<int, Adherent*> tup = std::make_tuple(code, adh);
+    listepretAdherent.push_back(tup);
 }
 
 ostream& operator<<(ostream& out, Bibliotheque& b){

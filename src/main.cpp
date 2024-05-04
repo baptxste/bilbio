@@ -37,6 +37,28 @@ Inventaire initLivres(){
     // repeter ces étapes pour les autres catégories
     return liste_tous_livres;
 }
+Adherent entrezAdherent(){   
+    Inventaire liste_tous_livres = initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    vector<Adherent> listeadherents = Adherent::initVecteurAdherent(listebiblios);
+    string nom ; 
+    for(int i = 0; i<listeadherents.size();++i){
+        nom += listeadherents[i].getNom()+" , ";
+    }
+    cout << " Quel adhérent veut emprunter un livre ? ( entrez le nom)"<<endl;
+    cout << nom<<endl;
+    // on récupère l'objet adhérent associé à ce nom
+    while(true){
+        cin >> nom;
+        for(int i = 0; i<listeadherents.size();++i){
+            if (listeadherents[i].getNom() == nom){
+                Adherent adh = listeadherents[i];
+                return adh;
+            }
+        }
+        cout <<" l'adhérent correspondant au nom : "<< nom<<" n'extiste pas."<<endl;
+    }
+}
 void creerNouvelleBiblio(){
     Inventaire liste_tous_livres = initLivres();
     vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
@@ -89,7 +111,12 @@ void creerNouvelleBiblio(){
     Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
     cout << " Bibliotheque bien enregistrée."<<endl;
 }
-// vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+void empruntDeLivre(){
+    Adherent a = entrezAdherent();
+
+
+}
+
 void menu(){
     bool continuer = true;
     int choix = 0;
@@ -122,7 +149,9 @@ int main (){
     // Inventaire liste_tous_livres =initLivres();
     // vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
     // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(listebiblios);
-    creerNouvelleBiblio();
+
+
+    empruntDeLivre();
 
     return 0;
 }

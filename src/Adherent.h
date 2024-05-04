@@ -41,6 +41,7 @@ public:
     void            setId(int id_adherent)                                                                                              ;
     void            setNbEmpruntMax(int nb_emprunt_max)                                                                                 ;
     void            setBibliotheque(Bibliotheque bibliotheque)                                                                          ;
+    void            emprunte(int code);
     friend ostream& operator<<(ostream& out, const Adherent& a)                                                                         ; // ok
     void            affiche();
     static vector<Adherent> initVecteurAdherent(vector<Bibliotheque> liste_biblio); // semble marcher à tester en profondeur

@@ -3,12 +3,12 @@
 
 #include <iostream>
 #include <vector>
-
+#include <tuple>
 #include "Livre.h"
 #include "Inventaire.h"
 
 using namespace std;
-
+class Adherent;
 class Bibliotheque
 {
 
@@ -16,6 +16,7 @@ private:
     string nom;
     string adresse;
     Inventaire inventaire;
+    vector<tuple<int, Adherent*>> listepretAdherent;
     bool categorieExiste(string categorie);
 
 public:
@@ -26,9 +27,11 @@ public:
     string getAdresse(); // ok 
     Inventaire getInventaire();// ok 
     Livre getLivre(int code); // ok
+    vector<tuple<int, Adherent*>> getPretAdherent();
     void setNom(string nom);// ok 
     void setAdresse(string adresse);// ok 
     void affiche();// ok 
+    void ajouterPret(int code, Adherent* adh);
     friend ostream& operator<<(ostream& out, Bibliotheque& b);// ok 
     void setInventaire(vector<string> isbn, Inventaire* tous_leslivres); // ok
     static vector<Bibliotheque> initialiserVecteurBibliotheque(Inventaire* tous_les_livres);// ok
