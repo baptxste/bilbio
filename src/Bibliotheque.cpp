@@ -88,7 +88,7 @@ ostream& operator<<(ostream& out, Bibliotheque& b){
 }
 
 void Bibliotheque::setInventaire(vector<string> vecisbn, Inventaire* tous_les_livres){
-    int j = 0;
+    int j = 1;
     for (int i=0; i<vecisbn.size();++i){
         Livre* l = tous_les_livres->getLivre(vecisbn[i]);
         // on vérifie que le livre existe bien i.e. isbn non défaut

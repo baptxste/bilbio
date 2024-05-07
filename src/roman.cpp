@@ -10,19 +10,23 @@ Roman::Roman( string auteur, string titre, string editeur, string isbn, string e
     this->genre = genre ;
     setCategorie("roman");
 }
+
 Roman::Roman(){
 }
 
 string  Roman::getGenre(){
     return this->genre;
 }                                                                                                          
+
 void    Roman::setGenre(string genre){
     this->genre = genre;
 }                                                                         
+
 void    Roman::affiche (){
     Livre::affiche();
     cout<<"genre : "<< genre<< endl;
 }
+
 vector<Roman> Roman::initialiserVecteurRomans(){
     vector<Roman> romans;
     ifstream fichier("bd/livres/liste_romans");
@@ -32,9 +36,9 @@ vector<Roman> Roman::initialiserVecteurRomans(){
             stringstream ss(ligne);
             string isbn, auteur, titre, editeur, etats, genre;
             getline(ss, isbn, ';');
-            getline(ss, auteur, ';');
             getline(ss, titre, ';');
             getline(ss, editeur, ';');
+            getline(ss, auteur, ';');
             getline(ss, etats, ';');
             getline(ss, genre, ';');
             romans.push_back(Roman( auteur, titre, editeur, isbn, etats, genre));
