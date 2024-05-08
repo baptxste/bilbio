@@ -1,4 +1,5 @@
 #include"Bibliotheque.h"
+#include"Adherent.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -22,13 +23,20 @@ bool Bibliotheque::categorieExiste(string cat){
 Bibliotheque::Bibliotheque(){
     nom = "Nom par défaut";
     adresse = "Adresse apr défaut";
-    inventaire = Inventaire();;
+    inventaire = Inventaire();
+    listepretAdherent = vector<tuple<int,int>>();
 }
 
 Bibliotheque::Bibliotheque(string nom, string  adresse){
     this->nom = nom;
     this->adresse = adresse;
     inventaire = Inventaire();
+    listepretAdherent = vector<tuple<int,int>>();
+}
+
+Bibliotheque::~Bibliotheque(){
+    inventaire.~Inventaire();
+    listepretAdherent.clear();
 }
 
 string Bibliotheque::getNom(){
@@ -57,7 +65,7 @@ Livre Bibliotheque::getLivre(int code){
 
 }
 
-vector<tuple<int, Adherent*>> Bibliotheque::getPretAdherent(){
+vector<tuple<int, int>> Bibliotheque::getPretAdherent(){
     return this->listepretAdherent;
 }
 
@@ -74,11 +82,16 @@ void Bibliotheque::affiche(){
     inventaire.affiche();
 }
 
-void Bibliotheque::ajouterPret(int code, Adherent* adh){
-    tuple<int, Adherent*> tup = std::make_tuple(code, adh);
+void Bibliotheque::ajouterPret(int code, int id){
+    tuple<int, int> tup = std::make_tuple(code, id);
     listepretAdherent.push_back(tup);
 }
-
+void Bibliotheque::affichePretAdherent(){
+    vector<tuple<int,int>> vec = this->listepretAdherent;
+    for( int i =0; i<vec.size();++i){
+        cout << "code : " << get<0>(vec[i])<<", id de l'adhérent : " << get<1>(vec[i])<<endl;
+    }
+}
 ostream& operator<<(ostream& out, Bibliotheque& b){
     out << "nom : ";
     out << b.getNom() << endl; 
@@ -111,10 +124,11 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* to
         string ligne; 
         while(getline(fichier, ligne)){
             stringstream ss(ligne);
-            string nom, adresse, listeisbn;
+            string nom, adresse, listeisbn, listepretadh;
             getline(ss, nom,';');
             getline(ss, adresse, ';');
             getline(ss, listeisbn, ';');
+            getline(ss, listepretadh,';');
             if (listeisbn.empty()){
                 cout << "pour la biblio " << nom <<" pas d'inventaire"<< endl;
                 bib.push_back(Bibliotheque(nom, adresse));
@@ -128,15 +142,44 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* to
                 }
                 Bibliotheque b = Bibliotheque(nom, adresse);
                 b.setInventaire(vecisbn, tous_les_livres);
+                // initialisation de la liste des prêts adhérents
+                vector<tuple<int,int>> vecpret;
+                if (!listepretadh.empty()){
+                    vector<string> prets;
+                    stringstream sspret(listepretadh);
+                    string pret;
+                    while(getline(sspret, pret,'|')){
+                        prets.push_back(pret);
+                    }
+                    for( int i=0;i<prets.size();++i){
+                        cout<<prets[i]<<endl;
+                    }
+                    for(int i=0; i<prets.size(); ++i){
+                        stringstream sspret(prets[i]);
+                        int code, id;
+                        char del = ':'; // Pour stocker le caractère '|'
+                        sspret >> code >> del >> id;
+                        b.ajouterPret(code,id);
+                        Noeud* current = b.getInventaire().getHead();
+                        while(current != nullptr){
+                            if(current->getAdresseLivre()->getCode() == code){
+                                current->getAdresseLivre()->setEtats("emprunté");
+                                break;
+                            }
+                            current = current->getSuivant();
+                        }
+                    }
+                } 
                 bib.push_back(b);
             } 
-        }  
+        }
     fichier.close();
     }else{
         cerr << "Erreur : Impossible d'ouvrir le fichier." << std::endl;
     }
     return bib;
 }
+
 
 void Bibliotheque::enregistrerVecteurBibliotheque(vector<Bibliotheque> vecbib){
     fstream fichier("bd/liste_biblios", std::ios::in | std::ios::out);
@@ -153,8 +196,12 @@ void Bibliotheque::enregistrerVecteurBibliotheque(vector<Bibliotheque> vecbib){
                 listeisbn += current->getLivre().getIsbn();
             }
             // fin liste isbn
-            fichier << vecbib[i].getNom()<<";"<<vecbib[i].getAdresse()<<";"<<listeisbn<<";"<<endl;
-
+            string stringpretadh ;
+            for(int j=0; j<vecbib[i].getPretAdherent().size();++j){
+                tuple<int,int> tuple= vecbib[i].getPretAdherent()[j];
+                stringpretadh += to_string(std::get<0>(tuple))+':'+to_string(std::get<1>(tuple))+'|';       
+            } 
+            fichier << vecbib[i].getNom()<<";"<<vecbib[i].getAdresse()<<";"<<listeisbn<<";"<<stringpretadh<<";"<<endl;
         }
     }
     fichier.close();

@@ -11,7 +11,7 @@ int Adherent::nb_adherent = 0;
 Adherent::Adherent(){
 }
 
-Adherent::Adherent(string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque){
+Adherent::Adherent(string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque* bibliotheque){
     this->nom = nom;
     this->prenom = prenom;
     this->adresse = adresse;
@@ -23,7 +23,7 @@ Adherent::Adherent(string nom, string prenom, string adresse, int nb_emprunt_max
     this->liste_emprunt_en_cours = Inventaire();
 }
 
-Adherent::Adherent(int id_adherent, string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque bibliotheque, Inventaire inv) : Adherent(nom,prenom, adresse, nb_emprunt_max, bibliotheque){
+Adherent::Adherent(int id_adherent, string nom, string prenom, string adresse, int nb_emprunt_max, Bibliotheque* bibliotheque, Inventaire inv) : Adherent(nom,prenom, adresse, nb_emprunt_max, bibliotheque){
     this->id_adherent = id_adherent;
     this->liste_emprunt_en_cours = inv;
 }
@@ -52,7 +52,7 @@ int Adherent::getNbEmpruntMax(){
     return this->nb_emprunt_max;
 }
 
-Bibliotheque Adherent::getBibliotheque(){
+Bibliotheque* Adherent::getBibliotheque(){
     return this->bibliotheque;
 }
 
@@ -80,7 +80,7 @@ void Adherent::setNbEmpruntMax(int nb_emprunt_max){
     this->nb_emprunt_max = nb_emprunt_max;
 }
 
-void Adherent::setBibliotheque(Bibliotheque biblio){
+void Adherent::setBibliotheque(Bibliotheque* biblio){
     this->bibliotheque = biblio;
 }
 
@@ -118,7 +118,7 @@ void Adherent::affiche(){
 void Adherent::emprunte(int code){
     if(peutEmpruter()){
         // vérifier que le livre est libre
-        Inventaire inv = bibliotheque.getInventaire();
+        Inventaire inv = bibliotheque->getInventaire();
         Noeud* current = inv.getHead();
         bool livretrouve = false;
         while(current!=nullptr){
@@ -127,7 +127,7 @@ void Adherent::emprunte(int code){
                     liste_emprunt_en_cours.ajoute(current->getLivre());
                     current->getAdresseLivre()->setEtats("emprunté");
                     livretrouve = true;
-                    bibliotheque.ajouterPret(code,this);
+                    bibliotheque->ajouterPret(code,this->getId());
                     cout << "Livre emprunté."<<endl;
                     break;
                 }
@@ -143,7 +143,7 @@ void Adherent::emprunte(int code){
     }
 }
 
-vector<Adherent> Adherent::initVecteurAdherent(vector<Bibliotheque> listebiblios){
+vector<Adherent> Adherent::initVecteurAdherent(vector<Bibliotheque>* listebiblios){
     vector<Adherent> adhs;
     ifstream fichier("bd/adherents/liste_adherents");
     if (fichier.is_open()) {
@@ -159,18 +159,18 @@ vector<Adherent> Adherent::initVecteurAdherent(vector<Bibliotheque> listebiblios
             getline(ss, biblio, ';');
             getline(ss, liste_emprunt, ';');
             // on récupère l'objet bibliotheque 
-            Bibliotheque bib;
+            Bibliotheque* bib;
             bool bibexiste =false;
-            for (int i=0; i<listebiblios.size();++i){
-                if( listebiblios[i].getNom() == biblio){
-                    bib  = listebiblios[i];
+            for (int i=0; i<listebiblios->size();++i){
+                if( (*listebiblios)[i].getNom() == biblio){
+                    bib  = &(*listebiblios)[i];
                     bibexiste = true;
                     break;
                 }
             }
             if(!bibexiste){
                 cout << "Attention la bibliothèque "<< biblio <<" utilisée pour crée l'adhérent " << nom <<" "<< prenom <<" n'existe pas, ajout d'une bibliothèque par défaut."<<endl;
-                bib = Bibliotheque();
+                bib = new Bibliotheque();
             }
             // liste des emprunts
             Inventaire emprunts;
@@ -178,7 +178,7 @@ vector<Adherent> Adherent::initVecteurAdherent(vector<Bibliotheque> listebiblios
                 emprunts =Inventaire();
             }
             else{
-                Inventaire invbiblio  = bib.getInventaire();
+                Inventaire invbiblio  = bib->getInventaire();
                 vector<int> veccode;
                 stringstream sscode(liste_emprunt);
                 string code;
@@ -186,7 +186,7 @@ vector<Adherent> Adherent::initVecteurAdherent(vector<Bibliotheque> listebiblios
                     veccode.push_back(stoi(code));
                 }
                 for(int i=0; i<veccode.size(); ++i){
-                    emprunts.ajoute(bib.getLivre(veccode[i]));
+                    emprunts.ajoute(bib->getLivre(veccode[i]));
                 }
             }
             adhs.push_back(Adherent(stoi(id),nom,prenom,adresse,stoi(nb_emprunt_max),bib,emprunts));
@@ -205,14 +205,15 @@ void Adherent::enregistrerVecteurAdherent(vector<Adherent> listeadh){
         for( int i = 0; i<listeadh.size();++i){
             // on récupère les codes des emprunts
             string listecodes;
+            // cout << listeadh[i].getNom()<< endl;
+            // listeadh[i].getEmprunts().affiche();
             Noeud* current = listeadh[i].getEmprunts().getHead();
             while(current!=nullptr){
                 listecodes += to_string(current->getLivre().getCode())+","; //to_string pour éviter le warning de la conversion de l'int
                 current = current->getSuivant();
             }
-
-            fichier << listeadh[i].getId()<<";"<<listeadh[i].getNom()<<";"<<listeadh[i].getPrenom()<<";"<<listeadh[i].getAdresse()<<";"<<listeadh[i].getNbEmpruntMax()<<";"<<listeadh[i].getBibliotheque().getNom()<<";"<<listecodes<<";"<<endl;
-
+            cout <<"LISTE DES CODES "<< listecodes<<endl;
+            fichier << listeadh[i].getId()<<";"<<listeadh[i].getNom()<<";"<<listeadh[i].getPrenom()<<";"<<listeadh[i].getAdresse()<<";"<<listeadh[i].getNbEmpruntMax()<<";"<<listeadh[i].getBibliotheque()->getNom()<<";"<<listecodes<<";"<<endl;
         }
         fichier.close();
     }

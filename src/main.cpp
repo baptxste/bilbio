@@ -115,42 +115,41 @@ void empruntDeLivre(){
     //Initialisation
     Inventaire liste_tous_livres = initLivres();
     vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
-    vector<Adherent> listeadherents = Adherent::initVecteurAdherent(listebiblios);
-    //
+    vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
     Adherent a = entrezAdherent(listeadherents);
-    Inventaire inv = a.getBibliotheque().getInventaire();
-    Noeud* current = inv.getHead();
-    //debug 
+    Inventaire inv = a.getBibliotheque()->getInventaire();
 
-        while(current!=nullptr){
-        cout<<current->getAdresseLivre()->getEtats()<<endl;
-        current = current->getSuivant();
-    }
     // on affiche les livres libres de la bilbiothèque
-    current = inv.getHead();
+    Noeud* current = inv.getHead();
     vector<int> codes;
+    int nblivredispo=0;
     while(current != nullptr){
         if (current->getAdresseLivre()->getEtats()=="libre"){
-            cout << current->getAdresseLivre()->getTitre()<<"  code : "<< current->getAdresseLivre()->getCode()<<endl;
+            nblivredispo++;
+            cout <<"Titre : "<< current->getAdresseLivre()->getTitre()<<"  code : "<< current->getAdresseLivre()->getCode()<<endl;
             codes.push_back(current->getAdresseLivre()->getCode());
-            current = current->getSuivant();
         }
-    }
-    bool codevalide = false;
-    int code;
-    while(codevalide == 0){
-        cout << "Entrez le code :";
-        cin >> code;
-        auto it = find(codes.begin(), codes.end(), code);
-        codevalide = (it != codes.end());
-    }
-    a.emprunte(code);
-    Adherent::enregistrerVecteurAdherent(listeadherents);
-    cout << "L'adhérent "<<a.getNom()<<" a bien emprunté le livre."<<endl;
-    current = inv.getHead();
-    while(current!=nullptr){
-        cout<<current->getAdresseLivre()->getEtats()<<endl;
         current = current->getSuivant();
+    }
+    if(nblivredispo>0){
+        bool codevalide = false;
+        int code;
+        while(codevalide == 0){
+            cout << "Entrez le code :";
+            cin >> code;
+            auto it = find(codes.begin(), codes.end(), code);
+            codevalide = (it != codes.end());
+        }
+        a.emprunte(code);
+        cout <<"EMPRUNTS "<<endl;
+        a.getEmprunts().affiche();
+        Adherent::enregistrerVecteurAdherent(listeadherents);
+        Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
+        cout << "L'adhérent "<<a.getNom()<<" a bien emprunté le livre."<<endl;
+    }else{
+        cout <<"Il n'y a plus de livre disponible à l'emprunt dans la bibliothèque de l'adhérent."<<endl;
+        Adherent::enregistrerVecteurAdherent(listeadherents);
+        Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
     }
 }
 
@@ -185,11 +184,18 @@ void menu(){
 int main (){
     // Inventaire liste_tous_livres =initLivres();
     // vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
-    // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(listebiblios);
+    // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
+
+    // Adherent a = listeadherents[0];
+    // cout <<"emprunts avant " << endl;
+    // vector<tuple<int,int>> vec = a.getBibliotheque()->getPretAdherent();
+    // for(int i =0; i<vec.size();++i){
+    //     tuple<int,int> tup = vec[i];
+    //     cout <<" code : "<<get<0>(tup) <<" id : "<< get<1>(tup)<<endl;
+    // }
+
+   menu();
     
-    
-    menu();
-    // empruntDeLivre();
 
 
 

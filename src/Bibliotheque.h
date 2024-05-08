@@ -16,22 +16,24 @@ private:
     string nom;
     string adresse;
     Inventaire inventaire;
-    vector<tuple<int, Adherent*>> listepretAdherent;
+    vector<tuple<int, int>> listepretAdherent; // ( code du livre, id de l'adhérent)
     bool categorieExiste(string categorie);
 
 public:
     vector<Bibliotheque> listeBibliotheque;
     Bibliotheque();// ok 
     Bibliotheque(string nom, string adresse); // ok 
+    ~Bibliotheque();
     string getNom();// ok 
     string getAdresse(); // ok 
     Inventaire getInventaire();// ok 
     Livre getLivre(int code); // ok
-    vector<tuple<int, Adherent*>> getPretAdherent();
+    vector<tuple<int, int>> getPretAdherent(); 
     void setNom(string nom);// ok 
     void setAdresse(string adresse);// ok 
     void affiche();// ok 
-    void ajouterPret(int code, Adherent* adh);
+    void ajouterPret(int code, int id);
+    void affichePretAdherent();
     friend ostream& operator<<(ostream& out, Bibliotheque& b);// ok 
     void setInventaire(vector<string> isbn, Inventaire* tous_leslivres); // ok
     static vector<Bibliotheque> initialiserVecteurBibliotheque(Inventaire* tous_les_livres);// ok
