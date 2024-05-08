@@ -151,9 +151,6 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* to
                     while(getline(sspret, pret,'|')){
                         prets.push_back(pret);
                     }
-                    for( int i=0;i<prets.size();++i){
-                        cout<<prets[i]<<endl;
-                    }
                     for(int i=0; i<prets.size(); ++i){
                         stringstream sspret(prets[i]);
                         int code, id;
@@ -175,7 +172,7 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* to
         }
     fichier.close();
     }else{
-        cerr << "Erreur : Impossible d'ouvrir le fichier." << std::endl;
+        cout << "Erreur : Impossible d'ouvrir le fichier." << endl;
     }
     return bib;
 }
@@ -199,7 +196,7 @@ void Bibliotheque::enregistrerVecteurBibliotheque(vector<Bibliotheque> vecbib){
             string stringpretadh ;
             for(int j=0; j<vecbib[i].getPretAdherent().size();++j){
                 tuple<int,int> tuple= vecbib[i].getPretAdherent()[j];
-                stringpretadh += to_string(std::get<0>(tuple))+':'+to_string(std::get<1>(tuple))+'|';       
+                stringpretadh += to_string(get<0>(tuple))+':'+to_string(get<1>(tuple))+'|';       
             } 
             fichier << vecbib[i].getNom()<<";"<<vecbib[i].getAdresse()<<";"<<listeisbn<<";"<<stringpretadh<<";"<<endl;
         }

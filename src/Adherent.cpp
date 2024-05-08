@@ -212,7 +212,6 @@ void Adherent::enregistrerVecteurAdherent(vector<Adherent> listeadh){
                 listecodes += to_string(current->getLivre().getCode())+","; //to_string pour éviter le warning de la conversion de l'int
                 current = current->getSuivant();
             }
-            cout <<"LISTE DES CODES "<< listecodes<<endl;
             fichier << listeadh[i].getId()<<";"<<listeadh[i].getNom()<<";"<<listeadh[i].getPrenom()<<";"<<listeadh[i].getAdresse()<<";"<<listeadh[i].getNbEmpruntMax()<<";"<<listeadh[i].getBibliotheque()->getNom()<<";"<<listecodes<<";"<<endl;
         }
         fichier.close();

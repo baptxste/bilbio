@@ -38,20 +38,21 @@ Inventaire initLivres(){
     return liste_tous_livres;
 }
 
-Adherent entrezAdherent(vector<Adherent> listeadherents){   
+Adherent* entrezAdherent(vector<Adherent>* listeadherents){   
     string nom ; 
-    for(int i = 0; i<listeadherents.size();++i){
-        nom += listeadherents[i].getNom()+" , ";
+    for(int i = 0; i<listeadherents->size();++i){
+        nom += (*listeadherents)[i].getNom()+" , ";
     }
     cout << " Choisissez l'adhérent ? ( entrez le nom)"<<endl;
     cout << nom<<endl;
     // on récupère l'objet adhérent associé à ce nom
     while(true){
         cin >> nom;
-        for(int i = 0; i<listeadherents.size();++i){
-            if (listeadherents[i].getNom() == nom){
-                Adherent adh = listeadherents[i];
-                return adh;
+        for(int i = 0; i<listeadherents->size();++i){
+            if ((*listeadherents)[i].getNom() == nom){
+                // Adherent adh = listeadherents[i];
+                // return adh;
+                return &(*listeadherents)[i];
             }
         }
         cout <<" l'adhérent correspondant au nom : "<< nom<<" n'extiste pas."<<endl;
@@ -116,9 +117,8 @@ void empruntDeLivre(){
     Inventaire liste_tous_livres = initLivres();
     vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
     vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
-    Adherent a = entrezAdherent(listeadherents);
-    Inventaire inv = a.getBibliotheque()->getInventaire();
-
+    Adherent* a = entrezAdherent(&listeadherents);
+    Inventaire inv = a->getBibliotheque()->getInventaire();
     // on affiche les livres libres de la bilbiothèque
     Noeud* current = inv.getHead();
     vector<int> codes;
@@ -140,12 +140,10 @@ void empruntDeLivre(){
             auto it = find(codes.begin(), codes.end(), code);
             codevalide = (it != codes.end());
         }
-        a.emprunte(code);
-        cout <<"EMPRUNTS "<<endl;
-        a.getEmprunts().affiche();
+        a->emprunte(code);
         Adherent::enregistrerVecteurAdherent(listeadherents);
         Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
-        cout << "L'adhérent "<<a.getNom()<<" a bien emprunté le livre."<<endl;
+        cout << "L'adhérent "<<a->getNom()<<" a bien emprunté le livre."<<endl;
     }else{
         cout <<"Il n'y a plus de livre disponible à l'emprunt dans la bibliothèque de l'adhérent."<<endl;
         Adherent::enregistrerVecteurAdherent(listeadherents);
@@ -186,17 +184,7 @@ int main (){
     // vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
     // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
 
-    // Adherent a = listeadherents[0];
-    // cout <<"emprunts avant " << endl;
-    // vector<tuple<int,int>> vec = a.getBibliotheque()->getPretAdherent();
-    // for(int i =0; i<vec.size();++i){
-    //     tuple<int,int> tup = vec[i];
-    //     cout <<" code : "<<get<0>(tup) <<" id : "<< get<1>(tup)<<endl;
-    // }
-
-   menu();
-    
-
+    menu();
 
 
     return 0;
