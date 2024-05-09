@@ -143,6 +143,28 @@ void Adherent::emprunte(int code){
     }
 }
 
+void Adherent::rend(int code){
+    Inventaire* emprunt = &liste_emprunt_en_cours;
+    Noeud * current = emprunt->getHead();
+    while( current!=nullptr){
+        if(current->getAdresseLivre()->getCode() == code){
+            current->getAdresseLivre()->setEtats("libre");
+            emprunt->enleve(code);
+            cout <<"ok"<<endl;
+            // on met a jour la liste de la biblio
+            vector<tuple<int,int>>* vec = bibliotheque->getAddPretAdherent();
+            for(int i=0;i<(*vec).size();++i){
+                if(get<0>((*vec)[i])==code && get<1>((*vec)[i])==this->getId()){
+                    auto it = vec->erase(vec->begin()+i);
+                }
+            }
+            cout << "Livre rendu."<<endl;
+            break;
+        }
+        current = current->getSuivant();
+    }
+}
+
 vector<Adherent> Adherent::initVecteurAdherent(vector<Bibliotheque>* listebiblios){
     vector<Adherent> adhs;
     ifstream fichier("bd/adherents/liste_adherents");
@@ -205,8 +227,6 @@ void Adherent::enregistrerVecteurAdherent(vector<Adherent> listeadh){
         for( int i = 0; i<listeadh.size();++i){
             // on récupère les codes des emprunts
             string listecodes;
-            // cout << listeadh[i].getNom()<< endl;
-            // listeadh[i].getEmprunts().affiche();
             Noeud* current = listeadh[i].getEmprunts().getHead();
             while(current!=nullptr){
                 listecodes += to_string(current->getLivre().getCode())+","; //to_string pour éviter le warning de la conversion de l'int

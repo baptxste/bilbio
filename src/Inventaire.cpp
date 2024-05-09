@@ -74,6 +74,45 @@ void Inventaire::ajoute(Livre l) {
 //     // delete livre_a_supprimer; Cette ligne la je ne suis pas sur et elle me fait peur
 // }
 
+void Inventaire::enleve(int code){
+    Noeud* current = head;
+    bool trouve = false;
+    // le livre à enlever est en tête
+    if(head->getLivre().getCode()==code){
+        Noeud* suivant = current->getSuivant();
+        setHead(suivant);
+        trouve = true;
+        current->~Noeud();
+        return;
+    }
+    // le livre à enlever est au milieu
+    while(current->getSuivant()->getSuivant()!= nullptr){
+        cout<<"check2"<<endl;
+        if( current->getSuivant()->getLivre().getCode()==code){
+            trouve = true;
+            Noeud* suivantagarder = current->getSuivant()->getSuivant();
+            current->getSuivant()->~Noeud();
+            current->setSuivant(suivantagarder);
+            return;
+        }
+        current = current->getSuivant();
+    }
+    // le livre est a la fin
+    if( current->getSuivant()->getSuivant()==nullptr){
+        cout<<"check3"<<endl;
+        if(current->getSuivant()->getLivre().getCode()==code){
+            current->getSuivant()->~Noeud();
+            current->setSuivant(nullptr);
+            trouve = true;
+            return;
+        }
+        
+    }
+    if( trouve == false){
+        cout <<" Problème le livre n'a pas été trouvé."<<endl;
+    }
+}
+
 void Inventaire::affiche() {
     
     Noeud* current = head;

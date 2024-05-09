@@ -69,6 +69,10 @@ vector<tuple<int, int>> Bibliotheque::getPretAdherent(){
     return this->listepretAdherent;
 }
 
+vector<tuple<int, int>>* Bibliotheque::getAddPretAdherent(){
+    return &this->listepretAdherent;
+}
+
 void Bibliotheque::setNom(string nom){
     this->nom = nom;
 }
@@ -86,6 +90,7 @@ void Bibliotheque::ajouterPret(int code, int id){
     tuple<int, int> tup = std::make_tuple(code, id);
     listepretAdherent.push_back(tup);
 }
+
 void Bibliotheque::affichePretAdherent(){
     vector<tuple<int,int>> vec = this->listepretAdherent;
     for( int i =0; i<vec.size();++i){
@@ -176,7 +181,6 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* to
     }
     return bib;
 }
-
 
 void Bibliotheque::enregistrerVecteurBibliotheque(vector<Bibliotheque> vecbib){
     fstream fichier("bd/liste_biblios", std::ios::in | std::ios::out);

@@ -28,7 +28,8 @@ public:
     string getAdresse(); // ok 
     Inventaire getInventaire();// ok 
     Livre getLivre(int code); // ok
-    vector<tuple<int, int>> getPretAdherent(); 
+    vector<tuple<int, int>> getPretAdherent();
+    vector<tuple<int, int>>* getAddPretAdherent();
     void setNom(string nom);// ok 
     void setAdresse(string adresse);// ok 
     void affiche();// ok 

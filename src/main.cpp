@@ -8,6 +8,7 @@
 #include"Inventaire.h"
 #include"Adherent.h"
 #include<sstream>
+#include <cstdlib> // Pour remove() et rename()
 
 
 using namespace std;
@@ -36,6 +37,41 @@ Inventaire initLivres(){
     }
     // repeter ces étapes pour les autres catégories
     return liste_tous_livres;
+}
+
+void supprimerLignesCourtes(const string& nomFichier) {
+    /*
+    Cette fonction est utilisée pour nettoyer les fichiers ( liste adhérents et liste biblios) car quand on 
+    rend un livre, de courtes chaînes de caractères sont écrites dedans ce qui pose un problème lors ce que l'on veut réinitialiser ces fichiers.
+    */
+    ifstream fichierEntree(nomFichier);
+    if (!fichierEntree) {
+        cout<< "Erreur : Impossible d'ouvrir le fichier en lecture." << endl;
+        return;
+    }
+    string nomFichierTemp = nomFichier + ".temp";
+    ofstream fichierTemp(nomFichierTemp);
+    if (!fichierTemp) {
+        cout << "Erreur : Impossible d'ouvrir le fichier temporaire en écriture." << endl;
+        fichierEntree.close();
+        return;
+    }
+    string ligne;
+    while (getline(fichierEntree, ligne)) {
+        if (ligne.size() >= 10) {
+            fichierTemp << ligne << endl;
+        }
+    }
+    fichierEntree.close();
+    fichierTemp.close();
+    if (remove(nomFichier.c_str()) != 0) {
+        cout << "Erreur : Impossible de supprimer le fichier d'origine." << endl;
+        return;
+    }
+    if (rename(nomFichierTemp.c_str(), nomFichier.c_str()) != 0) {
+        cout << "Erreur : Impossible de renommer le fichier temporaire." << endl;
+        return;
+    }
 }
 
 Adherent* entrezAdherent(vector<Adherent>* listeadherents){   
@@ -151,14 +187,51 @@ void empruntDeLivre(){
     }
 }
 
+void rendreUnLivre(){
+    /*
+    ATTENTION lors du retour d'un livre des lignes incorrectes sont crées dans liste adherent et liste biblios
+    */
+    Inventaire liste_tous_livres =initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
+    Adherent* a = entrezAdherent(&listeadherents);
+    cout << " Quel livre voulez-vous rendre ? "<<endl;
+    Inventaire inv = a->getEmprunts();
+    Noeud* current = inv.getHead();
+    vector<int> codes;
+    while(current!=nullptr){
+        cout << "Titre : "<<current->getLivre().getTitre()<< "  ==> code : "<<current->getLivre().getCode()<<endl;
+        codes.push_back(current->getLivre().getCode());
+        current = current->getSuivant();
+    }
+    if(codes.size()>0){
+        cout << "entrez le code du livre à rendre : "<<endl;
+        bool codevalide = false;
+        int code;
+        while(!codevalide){
+                cin >> code;
+                auto it = find(codes.begin(), codes.end(), code);
+                codevalide = (it != codes.end());
+        }
+        a->rend(code);
+        Adherent::enregistrerVecteurAdherent(listeadherents);
+        Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
+    }
+    else{
+        cout<< " Cette adhérent n'a pas d'emprunt en cours."<<endl;
+    }
+}
+
 void menu(){
     bool continuer = true;
     int choix = 0;
     do{
+        supprimerLignesCourtes("bd/adherents/liste_adherents");
+        supprimerLignesCourtes("bd/liste_biblios");
         cout << "===== Menu =====" << endl;
         cout << "1) Créer une nouvelle bibliothèque" << endl;
         cout << "2) Effectuer un emprunt de Livre pour un adhérent" << endl;
-        cout << "3) " << endl;
+        cout << "3) Rendre un livre" << endl;
 
         cout << "Votre choix : ";
         cin >> choix;
@@ -170,7 +243,7 @@ void menu(){
                 empruntDeLivre();
                 break;
             case 3:
-                //fixture();
+                rendreUnLivre();
                 break;
             default:
                 cout << endl <<  "#### Choix invalide." << endl;
@@ -185,7 +258,7 @@ int main (){
     // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
 
     menu();
-
+    
 
     return 0;
 }
