@@ -39,6 +39,7 @@ Inventaire initLivres(){
     return liste_tous_livres;
 }
 
+
 void supprimerLignesCourtes(const string& nomFichier) {
     /*
     Cette fonction est utilisée pour nettoyer les fichiers ( liste adhérents et liste biblios) car quand on 
@@ -86,12 +87,29 @@ Adherent* entrezAdherent(vector<Adherent>* listeadherents){
         cin >> nom;
         for(int i = 0; i<listeadherents->size();++i){
             if ((*listeadherents)[i].getNom() == nom){
-                // Adherent adh = listeadherents[i];
-                // return adh;
                 return &(*listeadherents)[i];
             }
         }
         cout <<" l'adhérent correspondant au nom : "<< nom<<" n'extiste pas."<<endl;
+    }
+}
+
+Bibliotheque* entrezBibliotheque(vector<Bibliotheque>* listebiblios){
+    vector<string> noms;
+    for(int i= 0;i<listebiblios->size();i++){
+        cout << "Bibliothèque  :  "<<(*listebiblios)[i].getNom()<<endl;
+        noms.push_back((*listebiblios)[i].getNom());
+    }
+    string nom;
+    while(true){
+        cout << "Entrez le nom : ";
+        cin >>nom;
+        for(int i= 0;i<listebiblios->size();i++){
+            if((*listebiblios)[i].getNom()==nom){
+                return &((*listebiblios)[i]);
+            }
+        cout <<"Le nom entrez ne correspond pas à une bibliothèque existante."<<endl;
+        }
     }
 }
 
@@ -148,6 +166,9 @@ void creerNouvelleBiblio(){
     cout << " Bibliotheque bien enregistrée."<<endl;
 }
 
+void creerNouveauLivre(Inventaire* liste_tous_livres){
+
+}
 void empruntDeLivre(){
     //Initialisation
     Inventaire liste_tous_livres = initLivres();
@@ -222,6 +243,51 @@ void rendreUnLivre(){
     }
 }
 
+void ajoutLivreBiblio(){
+    Inventaire liste_tous_livres =initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    cout << " Dans quelle bibliothèque voulez-vous ajouter le livre ?"<<endl;
+    Bibliotheque* bib = entrezBibliotheque(&listebiblios);
+    cout << "=== Liste des livres déjà existant ==="<<endl;
+    bool livreexiste = false;
+    string isbn;
+    vector<string> listeisbn;
+    while(!livreexiste){
+        Noeud* current = liste_tous_livres.getHead();
+        while(current!=nullptr){
+            cout <<"Titre : "<<current->getLivre().getTitre()<< "\t\tISBN  : "<<current->getLivre().getIsbn()<<endl;
+            listeisbn.push_back(current->getLivre().getIsbn());
+            current = current->getSuivant();
+        }
+        cout << "Le livre que vous souhaitez ajouter est-il déjà existant ? ( oui/non )"<<endl;
+        string reponse;
+        cin >> reponse;
+        if(reponse=="oui"){
+            livreexiste = true;
+            bool livrevalide = false;
+            while(!livrevalide){
+                cout << "Entrez l'isbn du livre choisit : ";
+                cin>>isbn;
+                auto it = find(listeisbn.begin(), listeisbn.end(), isbn);
+                livrevalide = (it != listeisbn.end());
+            }
+        }
+        else if(reponse=="non"){
+            cout <<"Vous devez d'abord créer le livre avant de l'ajouter."<<endl;
+            cout<<"Création du livre : "<<endl;
+            creerNouveauLivre(&liste_tous_livres);
+        }
+        else{
+            cout << "Réponse invalide : retour au menu"<<endl;
+            return;
+        }
+    }
+    // on a récupérer l'isbn à ajouter
+    bib->acheterLivre(isbn, &liste_tous_livres);
+    cout << "Le livre a bien été ajouté à la bibliothèque."<<endl;
+    Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
+}
+
 void menu(){
     bool continuer = true;
     int choix = 0;
@@ -231,6 +297,9 @@ void menu(){
         cout << "===== Menu =====" << endl;
         cout << "1) Créer une nouvelle bibliothèque" << endl;
         cout << "2) Effectuer un emprunt de Livre pour un adhérent" << endl;
+        cout << "3) Rendre un livre" << endl;
+        cout << "4) Ajouter un nouveau livre dans une bibliothèque." << endl;
+        cout << "3) Rendre un livre" << endl;
         cout << "3) Rendre un livre" << endl;
 
         cout << "Votre choix : ";
@@ -245,6 +314,9 @@ void menu(){
             case 3:
                 rendreUnLivre();
                 break;
+            case 4:
+                ajoutLivreBiblio();
+            break;
             default:
                 cout << endl <<  "#### Choix invalide." << endl;
         }
@@ -252,13 +324,18 @@ void menu(){
     }while(continuer);
 
 }
+
+
+
 int main (){
-    // Inventaire liste_tous_livres =initLivres();
-    // vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    Inventaire liste_tous_livres =initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
     // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
 
     menu();
-    
+    // finir ajoutlivrebiblio
+    // il faut créer la methode qui permet de créer un livre.
+
 
     return 0;
 }

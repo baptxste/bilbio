@@ -155,7 +155,7 @@ void Adherent::rend(int code){
             vector<tuple<int,int>>* vec = bibliotheque->getAddPretAdherent();
             for(int i=0;i<(*vec).size();++i){
                 if(get<0>((*vec)[i])==code && get<1>((*vec)[i])==this->getId()){
-                    auto it = vec->erase(vec->begin()+i);
+                    vec->erase(vec->begin()+i);
                 }
             }
             cout << "Livre rendu."<<endl;

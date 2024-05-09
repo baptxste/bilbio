@@ -97,6 +97,32 @@ void Bibliotheque::affichePretAdherent(){
         cout << "code : " << get<0>(vec[i])<<", id de l'adhérent : " << get<1>(vec[i])<<endl;
     }
 }
+
+void Bibliotheque::acheterLivre(string isbn,Inventaire* tous_les_livres){
+    Noeud* current = tous_les_livres->getHead();
+    bool livreexiste = false;
+    while(current!=nullptr){
+        if(current->getLivre().getIsbn()==isbn){
+            livreexiste = true;
+            Livre l = current->getLivre();
+            // on compte tous les livres présents pour assigner le code
+            int i = 0;
+            Noeud* tt = tous_les_livres->getHead();
+            while(tt->getSuivant()!=nullptr){
+                i++;
+                tt = tt->getSuivant();
+            }
+            l.setCode(i);
+            inventaire.ajoute(l);
+            return;
+        }
+        current = current->getSuivant();
+    }
+    if(!livreexiste){
+        cout << "Attention le livre demandé n'existe pas."<<endl;
+    }
+}
+
 ostream& operator<<(ostream& out, Bibliotheque& b){
     out << "nom : ";
     out << b.getNom() << endl; 
