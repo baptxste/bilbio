@@ -14,6 +14,27 @@ Roman::Roman( string auteur, string titre, string editeur, string isbn, string e
 Roman::Roman(){
 }
 
+void Roman::creerRomangraphique(){
+    cout << "=== Création d'un roman === "<<endl;
+    string auteur, titre, editeur, isbn, genre;
+    cout << " - Auteur : ";
+    cin >> auteur;
+    cout <<" - titre : ";
+    cin >> titre;
+    cout << " - Editeur : ";
+    cin >> editeur;
+    cout <<" - ISBN : ";
+    cin >>isbn;
+    cout <<" - Genre : ";
+    cin >> genre;
+    string etat = "libre";
+    string line = isbn +';'+titre+';'+editeur+';'+auteur+';'+etat+';'+genre+';';
+    std::ofstream fichier("bd/livres/liste_romans", std::ios_base::app);
+    fichier<<line<<endl;
+    fichier.close();
+
+}
+
 string  Roman::getGenre(){
     return this->genre;
 }                                                                                                          

@@ -8,25 +8,10 @@
 #include"Inventaire.h"
 #include"Adherent.h"
 #include<sstream>
-#include <cstdlib> // Pour remove() et rename()
+#include <cstdlib> // Pour remove() et rename() de la méthode supprimerLignesCourtes
 
 
 using namespace std;
-
-
-// faire un vecteur avec la liste des bibliotheques
-// faire un vecteur avec la liste des adhérents
-
-
-// Pour la gestion des emprunts etc ... 
-// rajouter deux vecteurs à chaque bibliothèques 
-// un pour les livres qui sont prétés ( à un adhérent ou à une bibliotèque)
-// un pour les livres qui sont empruntés 
-// et un vecteur qui est mis à jour à chaque fois qui contient la liste de 
-// livre de base - la liste des livres prétés + la liste des livres empruntés.
-
-// si on fait les choses comme ca, la fonction rendre un livre reviendra presque 
-// juste à emprunter le livre à la bibliotheque a qui on l'a preté
 
 Inventaire initLivres(){
     Inventaire liste_tous_livres = Inventaire();
@@ -38,7 +23,6 @@ Inventaire initLivres(){
     // repeter ces étapes pour les autres catégories
     return liste_tous_livres;
 }
-
 
 void supprimerLignesCourtes(const string& nomFichier) {
     /*
@@ -166,7 +150,39 @@ void creerNouvelleBiblio(){
     cout << " Bibliotheque bien enregistrée."<<endl;
 }
 
-void creerNouveauLivre(Inventaire* liste_tous_livres){
+Inventaire* creerNouveauLivre(Inventaire* liste_tous_livres){
+    vector<string> categories = {"Roman","Poésie","Bande Dessinée"};
+    cout << "=== Catégories possibles ==="<<endl;
+    for(int i =0;i<categories.size();++i){
+        cout<<" "<<(i+1)<<") "<<categories[i]<<endl;
+    }
+    int cat;
+    bool catvalide = false;
+    while(!catvalide){
+        cout << "Quel type de livre souhaitez-vous créer ? ( entrez le numéro)";
+        cin >> cat;
+        cout << (cat<1 && cat>(categories.size()+1))<<endl;
+        if( cat>=1 && cat<=(categories.size()+1)){
+            catvalide = true;
+        }
+    }
+    switch (cat)
+    {
+    case 1:
+        Roman::creerRomangraphique();
+        break;
+    case 2:
+    /* code */
+    break;
+    case 3:
+    /* code */
+    break;
+    
+    default:
+        break;
+    }
+    Inventaire inv = initLivres();
+    return &inv;
 
 }
 void empruntDeLivre(){
@@ -275,7 +291,7 @@ void ajoutLivreBiblio(){
         else if(reponse=="non"){
             cout <<"Vous devez d'abord créer le livre avant de l'ajouter."<<endl;
             cout<<"Création du livre : "<<endl;
-            creerNouveauLivre(&liste_tous_livres);
+            liste_tous_livres = *creerNouveauLivre(&liste_tous_livres);
         }
         else{
             cout << "Réponse invalide : retour au menu"<<endl;
@@ -328,13 +344,15 @@ void menu(){
 
 
 int main (){
-    Inventaire liste_tous_livres =initLivres();
-    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    // Inventaire liste_tous_livres =initLivres();
+    // vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
     // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
 
     menu();
     // finir ajoutlivrebiblio
     // il faut créer la methode qui permet de créer un livre.
+    // Roman::creerRomangraphique();
+
 
 
     return 0;

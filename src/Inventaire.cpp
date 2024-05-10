@@ -48,32 +48,6 @@ void Inventaire::ajoute(Livre l) {
     }
 }
 
-// void Inventaire::enleve(Livre livre_a_supprimer) {
-//     if ( (livre_a_supprimer.getIsbn() == "") || (head == nullptr) ) {
-//         return;
-//     }
-
-//     if ( livre_a_supprimer.getIsbn() == head->getLivre()->getIsbn() ) {
-//         Noeud* temporaire = head;
-//         head = head->getSuivant();
-//         delete temporaire;
-//     } 
-//     else {
-//         Noeud* precedent = head;
-//         while ( (precedent != nullptr) && (precedent->getSuivant()->getLivre()->getIsbn() != livre_a_supprimer.getIsbn()) ){
-//             precedent = precedent->getSuivant();
-//         }
-
-//         if (precedent == nullptr) {
-//             return;
-//         }
-//         Noeud* temporaire = precedent->getSuivant();
-//         precedent->setSuivant(temporaire->getSuivant());
-//         delete temporaire;
-//     }
-//     // delete livre_a_supprimer; Cette ligne la je ne suis pas sur et elle me fait peur
-// }
-
 void Inventaire::enleve(int code){
     Noeud* current = head;
     bool trouve = false;
@@ -105,8 +79,7 @@ void Inventaire::enleve(int code){
             current->setSuivant(nullptr);
             trouve = true;
             return;
-        }
-        
+        }  
     }
     if( trouve == false){
         cout <<" Problème le livre n'a pas été trouvé."<<endl;

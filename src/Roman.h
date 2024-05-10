@@ -15,6 +15,7 @@ private:
 public: 
             Roman();
             Roman   (string auteur, string titre, string editeur, string isbn, string etats, string genre)  ;// ok 
+    void static creerRomangraphique();
     string  getGenre()                                                                                                                                      ;// ok
     void    setGenre(string genre)                                                                                                                          ;// ok
     void    affiche ()                                                                                                                                      ;// ok
