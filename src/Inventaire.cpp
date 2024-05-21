@@ -61,7 +61,6 @@ void Inventaire::enleve(int code){
     }
     // le livre à enlever est au milieu
     while(current->getSuivant()->getSuivant()!= nullptr){
-        cout<<"check2"<<endl;
         if( current->getSuivant()->getLivre().getCode()==code){
             trouve = true;
             Noeud* suivantagarder = current->getSuivant()->getSuivant();
@@ -73,7 +72,6 @@ void Inventaire::enleve(int code){
     }
     // le livre est a la fin
     if( current->getSuivant()->getSuivant()==nullptr){
-        cout<<"check3"<<endl;
         if(current->getSuivant()->getLivre().getCode()==code){
             current->getSuivant()->~Noeud();
             current->setSuivant(nullptr);

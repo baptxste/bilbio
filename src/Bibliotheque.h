@@ -37,11 +37,12 @@ public:
     void ajouterPret(int code, int id);// ok 
     void affichePretAdherent();
     void acheterLivre(string isbn, Inventaire* tous_les_livres);// ok
-    void empruntLivreBiblio(string isbn, Bibliotheque* bib_qui_prete);
+    void empruntLivreBiblio(string isbn, Bibliotheque* bib_qui_prete); // ok
+    void rendreLivresEmpruntes(vector<Bibliotheque> listebiblios); // a faire
     friend ostream& operator<<(ostream& out, Bibliotheque& b);// ok 
     void setInventaire(vector<string> isbn, Inventaire* tous_leslivres); // ok
-    static vector<Bibliotheque> initialiserVecteurBibliotheque(Inventaire* tous_les_livres);// ok
-    static void enregistrerVecteurBibliotheque(vector<Bibliotheque> liste); //ok
+    static vector<Bibliotheque> initialiserVecteurBibliotheque(Inventaire* tous_les_livres);// ok a modifier pour incorporer les emprunts biblio
+    static void enregistrerVecteurBibliotheque(vector<Bibliotheque> liste); //ok a modifier pour incorporer les emprunts biblios
 };
 
 #endif /* BIBLIOTHEQUE_H */

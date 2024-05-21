@@ -107,7 +107,7 @@ void Bibliotheque::acheterLivre(string isbn,Inventaire* tous_les_livres){
             Livre l = current->getLivre();
             // on compte tous les livres présents pour assigner le code
             int i = 0;
-            Noeud* tt = tous_les_livres->getHead();
+            Noeud* tt = inventaire.getHead();
             while(tt->getSuivant()!=nullptr){
                 i++;
                 tt = tt->getSuivant();
@@ -147,6 +147,66 @@ void Bibliotheque::setInventaire(vector<string> vecisbn, Inventaire* tous_les_li
         }
     }
 }
+
+
+void Bibliotheque::empruntLivreBiblio(string isbn, Bibliotheque* bib_qui_prete){
+    if(bib_qui_prete->getInventaire().getLivre(isbn)->getEtats()=="libre"){
+        Livre ll = *(bib_qui_prete->getInventaire().getLivre(isbn));    bib_qui_prete->getInventaire().getLivre(isbn)->setEtats("prêté");
+        string nom_proprio = bib_qui_prete->getNom();
+        ll.setEtats("libre");
+        int code = 1;
+        Noeud* tt = inventaire.getHead();
+        while(tt->getSuivant()!=nullptr){
+            code++;
+            tt = tt->getSuivant();
+        }
+        code++;
+        ll.setCode(code);
+        tuple<string, int> tup(nom_proprio, code);
+        inventaire.ajoute(ll);
+        listeempruntbiblio.push_back(tup);
+    }
+    else{
+        cout << " Attention le livre isbn : "<<isbn<<" n'est pas disponible dans la bibliotheque : "<<bib_qui_prete->getNom()<<endl;
+    }
+}
+
+void Bibliotheque::rendreLivresEmpruntes(vector<Bibliotheque> listebiblios){
+    for(int i =0; i<listeempruntbiblio.size(); ++i){
+        tuple<string, int> tup = listeempruntbiblio[i];
+        int code = get<1>(tup);
+
+        Noeud* current = inventaire.getHead();
+        string isbn;
+        while(current!=nullptr){
+            if (current->getLivre().getCode()==code && current->getLivre().getEtats()=="libre"){
+                // on retrouve la bilbiothèque avec sont nom
+                Bibliotheque bib;
+                for(int j=0; j<listebiblios.size();++j){
+                    if(listebiblios[j].getNom()==get<0>(tup)){
+                        bib = listebiblios[j];
+                    }
+                }
+                isbn = current->getLivre().getIsbn();
+                inventaire.enleve(code);
+                bib.getInventaire().getLivre(isbn)->setEtats("libre");
+            }
+            current = current->getSuivant();
+
+        }
+    }
+}
+// void Bibliotheque::rendreLivresEmpruntes(vector<Bibliotheque> listebiblios){
+//     for(int i = 0; i<listeempruntbiblio.size();++i){
+//         tuple<string,int> tup = listeempruntbiblio[i];
+//         string code = to_string(get<1>(tup));
+//         if(this->getInventaire().getCode(code)->getEtats()=="libre"){
+//             this->getInventaire().enleve(inventaire.getLivre(isbn)->getCode());
+//             // il faut changer le status du livre dans la biblio proprio surmenent prendre le vecteur de biblio en argmument
+//             cout << "Le livre isbn "<<inventaire.getLivre(isbn)->getIsbn()<<" de la bibliothèque "<< nom << " a été rendu."<<endl;
+//         }
+//     }
+// }
 
 vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* tous_les_livres){
     vector<Bibliotheque> bib;

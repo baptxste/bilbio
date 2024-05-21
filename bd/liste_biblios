@@ -1,3 +1,3 @@
 nom0;adresse0;isbn0,isbn1;;
-nom1;adresse1;isbn0,isbn1,isbn2,isbn1,;
-nom2;adresse2;isbn0,isbn1,isbn2;2:2|3:2|;
+nom1;adresse1;isbn0,isbn1,isbn2,isbn1;;
+nom2;adresse2;isbn0,isbn1,isbn2;3:2|2:2|;

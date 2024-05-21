@@ -185,6 +185,7 @@ Inventaire* creerNouveauLivre(Inventaire* liste_tous_livres){
     return &inv;
 
 }
+
 void empruntDeLivre(){
     //Initialisation
     Inventaire liste_tous_livres = initLivres();
@@ -315,8 +316,8 @@ void menu(){
         cout << "2) Effectuer un emprunt de Livre pour un adhérent" << endl;
         cout << "3) Rendre un livre" << endl;
         cout << "4) Ajouter un nouveau livre dans une bibliothèque." << endl;
-        cout << "3) Rendre un livre" << endl;
-        cout << "3) Rendre un livre" << endl;
+        cout << "5) Rendre un livre" << endl;
+        cout << "6) Rendre un livre" << endl;
 
         cout << "Votre choix : ";
         cin >> choix;
@@ -344,14 +345,32 @@ void menu(){
 
 
 int main (){
-    // Inventaire liste_tous_livres =initLivres();
-    // vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
-    // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
+    Inventaire liste_tous_livres =initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
 
-    menu();
-    // finir ajoutlivrebiblio
-    // il faut créer la methode qui permet de créer un livre.
-    // Roman::creerRomangraphique();
+    // menu();
+
+    /*pour l'emprunt de livre entre bilbio : 
+    - faire un vecteur qui contient le nom de la biblio a qui est emprunté le livre et le livre (tuple)
+    - 
+    */
+
+    Bibliotheque b1 = listebiblios[0];
+    Bibliotheque b2 = listebiblios[1];
+    // b2.getInventaire().affiche();
+    b2.empruntLivreBiblio("isbn0",&b1);
+    cout << "B1"<<endl;
+    b1.getInventaire().affiche();
+    cout << "B2"<<endl;
+    b2.getInventaire().affiche();
+    b2.rendreLivresEmpruntes(listebiblios);
+    cout << "RENDRE"<<endl;
+    cout << "B1"<<endl;
+    b1.getInventaire().affiche();
+    cout << "B2"<<endl;
+    b2.getInventaire().affiche();
+
 
 
 
