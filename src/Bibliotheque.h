@@ -31,14 +31,17 @@ public:
     Livre getLivre(int code); // ok
     vector<tuple<int, int>> getPretAdherent();
     vector<tuple<int, int>>* getAddPretAdherent();
+    vector<tuple<string,int>>* getPretBiblio();
     void setNom(string nom);// ok 
     void setAdresse(string adresse);// ok 
     void affiche();// ok 
     void ajouterPret(int code, int id);// ok 
+    void ajouterempruntbib(string nom, int code);
+    void supprimeEmpruntBib(int code);
     void affichePretAdherent();
     void acheterLivre(string isbn, Inventaire* tous_les_livres);// ok
     void empruntLivreBiblio(string isbn, Bibliotheque* bib_qui_prete); // ok
-    void rendreLivresEmpruntes(vector<Bibliotheque> listebiblios); // a faire
+    void rendreLivresEmpruntes(vector<Bibliotheque>* listebiblios); // a faire
     friend ostream& operator<<(ostream& out, Bibliotheque& b);// ok 
     void setInventaire(vector<string> isbn, Inventaire* tous_leslivres); // ok
     static vector<Bibliotheque> initialiserVecteurBibliotheque(Inventaire* tous_les_livres);// ok a modifier pour incorporer les emprunts biblio

@@ -25,6 +25,7 @@ Bibliotheque::Bibliotheque(){
     adresse = "Adresse apr défaut";
     inventaire = Inventaire();
     listepretAdherent = vector<tuple<int,int>>();
+    listeempruntbiblio = vector<tuple<string,int>>();
 }
 
 Bibliotheque::Bibliotheque(string nom, string  adresse){
@@ -32,11 +33,13 @@ Bibliotheque::Bibliotheque(string nom, string  adresse){
     this->adresse = adresse;
     inventaire = Inventaire();
     listepretAdherent = vector<tuple<int,int>>();
+    listeempruntbiblio = vector<tuple<string,int>>();
 }
 
 Bibliotheque::~Bibliotheque(){
     inventaire.~Inventaire();
     listepretAdherent.clear();
+    listeempruntbiblio.clear();
 }
 
 string Bibliotheque::getNom(){
@@ -73,6 +76,10 @@ vector<tuple<int, int>>* Bibliotheque::getAddPretAdherent(){
     return &this->listepretAdherent;
 }
 
+vector<tuple<string,int>>* Bibliotheque::getPretBiblio(){
+    return &this->listeempruntbiblio;
+}
+
 void Bibliotheque::setNom(string nom){
     this->nom = nom;
 }
@@ -89,6 +96,20 @@ void Bibliotheque::affiche(){
 void Bibliotheque::ajouterPret(int code, int id){
     tuple<int, int> tup = std::make_tuple(code, id);
     listepretAdherent.push_back(tup);
+}
+
+void Bibliotheque::ajouterempruntbib(string nom, int code){
+    tuple<string, int > tup = make_tuple(nom,code);
+    listeempruntbiblio.push_back(tup);
+}
+
+void Bibliotheque::supprimeEmpruntBib(int code){
+    for(int i=0;i<listeempruntbiblio.size();++i){
+        if (get<1>(listeempruntbiblio[i])==code){
+            listeempruntbiblio.erase(listeempruntbiblio.begin() +i);
+            break;
+        }
+    }
 }
 
 void Bibliotheque::affichePretAdherent(){
@@ -171,42 +192,38 @@ void Bibliotheque::empruntLivreBiblio(string isbn, Bibliotheque* bib_qui_prete){
     }
 }
 
-void Bibliotheque::rendreLivresEmpruntes(vector<Bibliotheque> listebiblios){
+void Bibliotheque::rendreLivresEmpruntes(vector<Bibliotheque>* listebiblios){
     for(int i =0; i<listeempruntbiblio.size(); ++i){
         tuple<string, int> tup = listeempruntbiblio[i];
         int code = get<1>(tup);
-
         Noeud* current = inventaire.getHead();
         string isbn;
         while(current!=nullptr){
+            cout << "check"<<endl;
+            cout << code << endl;
+            cout << current->getLivre().getCode() << endl;
+            cout << current->getLivre().getEtats() << endl;
             if (current->getLivre().getCode()==code && current->getLivre().getEtats()=="libre"){
-                // on retrouve la bilbiothèque avec sont nom
+                cout << "check2"<<endl;
+                // on retrouve la bilbiothèque avec son nom
                 Bibliotheque bib;
-                for(int j=0; j<listebiblios.size();++j){
-                    if(listebiblios[j].getNom()==get<0>(tup)){
-                        bib = listebiblios[j];
+                for(int j=0; j<listebiblios->size();++j){
+                    if((*listebiblios)[j].getNom()==get<0>(tup)){
+                        bib = (*listebiblios)[j];
                     }
                 }
                 isbn = current->getLivre().getIsbn();
                 inventaire.enleve(code);
                 bib.getInventaire().getLivre(isbn)->setEtats("libre");
+                this->supprimeEmpruntBib(code);
+                cout << "livre code : " << code << " rendu"<<endl;
             }
             current = current->getSuivant();
 
         }
     }
 }
-// void Bibliotheque::rendreLivresEmpruntes(vector<Bibliotheque> listebiblios){
-//     for(int i = 0; i<listeempruntbiblio.size();++i){
-//         tuple<string,int> tup = listeempruntbiblio[i];
-//         string code = to_string(get<1>(tup));
-//         if(this->getInventaire().getCode(code)->getEtats()=="libre"){
-//             this->getInventaire().enleve(inventaire.getLivre(isbn)->getCode());
-//             // il faut changer le status du livre dans la biblio proprio surmenent prendre le vecteur de biblio en argmument
-//             cout << "Le livre isbn "<<inventaire.getLivre(isbn)->getIsbn()<<" de la bibliothèque "<< nom << " a été rendu."<<endl;
-//         }
-//     }
-// }
+
 
 vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* tous_les_livres){
     vector<Bibliotheque> bib;
@@ -215,11 +232,12 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* to
         string ligne; 
         while(getline(fichier, ligne)){
             stringstream ss(ligne);
-            string nom, adresse, listeisbn, listepretadh;
+            string nom, adresse, listeisbn, listepretadh, listepretbiblio;
             getline(ss, nom,';');
             getline(ss, adresse, ';');
             getline(ss, listeisbn, ';');
             getline(ss, listepretadh,';');
+            getline(ss, listepretbiblio,';');
             if (listeisbn.empty()){
                 cout << "pour la biblio " << nom <<" pas d'inventaire"<< endl;
                 bib.push_back(Bibliotheque(nom, adresse));
@@ -245,7 +263,7 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* to
                     for(int i=0; i<prets.size(); ++i){
                         stringstream sspret(prets[i]);
                         int code, id;
-                        char del = ':'; // Pour stocker le caractère '|'
+                        char del = ':'; // Pour stocker le caractère ':'
                         sspret >> code >> del >> id;
                         b.ajouterPret(code,id);
                         Noeud* current = b.getInventaire().getHead();
@@ -257,10 +275,55 @@ vector<Bibliotheque> Bibliotheque::initialiserVecteurBibliotheque(Inventaire* to
                             current = current->getSuivant();
                         }
                     }
-                } 
+                }
+                if(!listepretbiblio.empty()){
+                    vector<string> pretbib;
+                    stringstream sspret(listepretbiblio);
+                    string pret;
+                    while(getline(sspret, pret,'|')){
+                        pretbib.push_back(pret);
+                    }
+                    for(int i = 0; i<pretbib.size();++i){
+                        stringstream sspret(pretbib[i]);
+                        string nom;
+                        string strcode;
+                        getline(sspret,nom,':');
+                        getline(sspret,strcode);
+                        // on peut ne pas faire de vérification pour l'initialisation de ce vecteur 
+                        // car elle a été faite au moment de l'emprunt
+                        int code = stoi(strcode);
+                        b.ajouterempruntbib(nom, code);
+                    }
+
+                }
                 bib.push_back(b);
             } 
         }
+    // on itère sur le vecteur de bibliothèque pour venir setEtat sur prêté pour tous les livres
+    // qui le sont, on ne peut pas le faire avant car on a seulement la liste des emprunts entre biblio et non 
+    // celle des prêts, il faut donc d'abord créer toutes les bibliothèques puis ensuite modifier les inventaires
+    for(int i = 0; i<bib.size();++i){
+        vector<tuple<string,int>>* empruntbib = bib[i].getPretBiblio();
+        for(int j = 0; j<empruntbib->size();++j){
+            tuple<string,int> tup = (*empruntbib)[j];
+            string nom = get<0>(tup);
+            int code = get<1>(tup);
+            Noeud* current = bib[i].getInventaire().getHead();
+            while( current!= nullptr){
+                if ( current->getLivre().getCode()==code){
+                    string isbn = current->getLivre().getIsbn();
+                    // on a récupéré l'isbn du livre emprunté 
+                    // on cherche sa biblio d'origine et on modifie l'état
+                    for (int k =0; k<bib.size();++k){
+                        if(bib[k].getNom()== nom){
+                            bib[k].getInventaire().getLivre(isbn)->setEtats("prêté");
+                        }
+                    }
+                }
+                current = current->getSuivant();
+            }
+        }
+    }
     fichier.close();
     }else{
         cout << "Erreur : Impossible d'ouvrir le fichier." << endl;
@@ -288,7 +351,13 @@ void Bibliotheque::enregistrerVecteurBibliotheque(vector<Bibliotheque> vecbib){
                 tuple<int,int> tuple= vecbib[i].getPretAdherent()[j];
                 stringpretadh += to_string(get<0>(tuple))+':'+to_string(get<1>(tuple))+'|';       
             } 
-            fichier << vecbib[i].getNom()<<";"<<vecbib[i].getAdresse()<<";"<<listeisbn<<";"<<stringpretadh<<";"<<endl;
+            string stringpretbiblio ;
+            for(int j=0; j<vecbib[i].getPretBiblio()->size();++j){
+                vector<tuple<string,int>>* vec = vecbib[i].getPretBiblio();
+                tuple<string,int> tuple2= (*vec)[j];
+                stringpretbiblio += get<0>(tuple2)+':'+to_string(get<1>(tuple2))+'|';       
+            } 
+            fichier << vecbib[i].getNom()<<";"<<vecbib[i].getAdresse()<<";"<<listeisbn<<";"<<stringpretadh<<";"<<stringpretbiblio<<";"<<endl;
         }
     }
     fichier.close();

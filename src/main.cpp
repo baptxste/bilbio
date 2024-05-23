@@ -43,7 +43,7 @@ void supprimerLignesCourtes(const string& nomFichier) {
     }
     string ligne;
     while (getline(fichierEntree, ligne)) {
-        if (ligne.size() >= 10) {
+        if (ligne.size() >= 25) {
             fichierTemp << ligne << endl;
         }
     }
@@ -92,8 +92,9 @@ Bibliotheque* entrezBibliotheque(vector<Bibliotheque>* listebiblios){
             if((*listebiblios)[i].getNom()==nom){
                 return &((*listebiblios)[i]);
             }
-        cout <<"Le nom entrez ne correspond pas à une bibliothèque existante."<<endl;
         }
+        cout <<"Le nom entré ne correspond pas à une bibliothèque existante."<<endl;
+        
     }
 }
 
@@ -305,6 +306,46 @@ void ajoutLivreBiblio(){
     Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
 }
 
+void empruntEntreBiblio(){
+    Inventaire liste_tous_livres =initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    cout << " Quelle bibliothèque souhaite emprunter un livre ?"<<endl;
+    Bibliotheque* bib = entrezBibliotheque(&listebiblios);
+    cout << " Dans quelle bibliothèque voulez-vous emprunter le livre ?"<<endl;
+    Bibliotheque* bibquiprete = entrezBibliotheque(&listebiblios);
+    Noeud* current = bibquiprete->getInventaire().getHead();
+    cout << "=== Les livres disponibles dans cette bibliothèque sont : "<< endl;
+    vector<string> listeisbn ;
+    while (current!= nullptr){
+        if( current->getLivre().getEtats()=="libre"){
+            cout << current->getLivre().getTitre()<<"  =>   "<< current->getLivre().getIsbn() << endl;
+            listeisbn.push_back(current->getLivre().getIsbn());
+        }
+        current = current->getSuivant();
+    }
+    bool isbncorrect = false;
+    string isbn;
+    while( !isbncorrect){
+        cout << "Entrez l'isbn du livre que vous souhaité emprunter : " ;
+        cin >> isbn;
+        auto it = find(listeisbn.begin(), listeisbn.end(), isbn);
+        isbncorrect = (it!=listeisbn.end());
+    }
+    bib->empruntLivreBiblio(isbn,bibquiprete);
+    Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
+
+
+}
+
+void rendreEmpruntsBiblio(){
+    Inventaire liste_tous_livres =initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    cout << " Quelle bibliothèque souhaite rendre les livres qu'elle a emprunté ?"<<endl;
+    Bibliotheque* bib = entrezBibliotheque(&listebiblios);
+    bib->rendreLivresEmpruntes(&listebiblios);
+    Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
+}
+
 void menu(){
     bool continuer = true;
     int choix = 0;
@@ -316,8 +357,8 @@ void menu(){
         cout << "2) Effectuer un emprunt de Livre pour un adhérent" << endl;
         cout << "3) Rendre un livre" << endl;
         cout << "4) Ajouter un nouveau livre dans une bibliothèque." << endl;
-        cout << "5) Rendre un livre" << endl;
-        cout << "6) Rendre un livre" << endl;
+        cout << "5) Emprunt entre bibliothèque." << endl;
+        cout << "6) Rendre les emprunts d'une bibliothèque." << endl;
 
         cout << "Votre choix : ";
         cin >> choix;
@@ -334,6 +375,12 @@ void menu(){
             case 4:
                 ajoutLivreBiblio();
             break;
+            case 5:
+                empruntEntreBiblio();
+            break;
+            case 6:
+                rendreEmpruntsBiblio();
+            break;
             default:
                 cout << endl <<  "#### Choix invalide." << endl;
         }
@@ -345,31 +392,18 @@ void menu(){
 
 
 int main (){
-    Inventaire liste_tous_livres =initLivres();
-    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
-    vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
+    // Inventaire liste_tous_livres =initLivres();
+    // vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    // vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
 
-    // menu();
+    menu();
 
-    /*pour l'emprunt de livre entre bilbio : 
-    - faire un vecteur qui contient le nom de la biblio a qui est emprunté le livre et le livre (tuple)
-    - 
-    */
 
-    Bibliotheque b1 = listebiblios[0];
-    Bibliotheque b2 = listebiblios[1];
-    // b2.getInventaire().affiche();
-    b2.empruntLivreBiblio("isbn0",&b1);
-    cout << "B1"<<endl;
-    b1.getInventaire().affiche();
-    cout << "B2"<<endl;
-    b2.getInventaire().affiche();
-    b2.rendreLivresEmpruntes(listebiblios);
-    cout << "RENDRE"<<endl;
-    cout << "B1"<<endl;
-    b1.getInventaire().affiche();
-    cout << "B2"<<endl;
-    b2.getInventaire().affiche();
+
+
+//  il faut modifier l'init du vecteur biblio pour set l'état sur prêté
+
+    // Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
 
 
 
