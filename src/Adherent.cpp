@@ -6,7 +6,7 @@
 #include<sstream>
 #include<fstream>
 
-int Adherent::nb_adherent = 0;
+int Adherent::nb_adherent = 1;
 
 Adherent::Adherent(){
 }
@@ -150,7 +150,6 @@ void Adherent::rend(int code){
         if(current->getAdresseLivre()->getCode() == code){
             current->getAdresseLivre()->setEtats("libre");
             emprunt->enleve(code);
-            cout <<"ok"<<endl;
             // on met a jour la liste de la biblio
             vector<tuple<int,int>>* vec = bibliotheque->getAddPretAdherent();
             for(int i=0;i<(*vec).size();++i){
@@ -212,13 +211,14 @@ vector<Adherent> Adherent::initVecteurAdherent(vector<Bibliotheque>* listebiblio
                 }
             }
             adhs.push_back(Adherent(stoi(id),nom,prenom,adresse,stoi(nb_emprunt_max),bib,emprunts));
+            
         }
         fichier.close();
     } else {
         std::cerr << "Erreur : Impossible d'ouvrir le fichier." << std::endl;
     }
+    Adherent::nb_adherent = adhs.size()+1;
     return adhs;
-
 }
 
 void Adherent::enregistrerVecteurAdherent(vector<Adherent> listeadh){

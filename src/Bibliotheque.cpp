@@ -129,7 +129,7 @@ void Bibliotheque::acheterLivre(string isbn,Inventaire* tous_les_livres){
             // on compte tous les livres présents pour assigner le code
             int i = 0;
             Noeud* tt = inventaire.getHead();
-            while(tt->getSuivant()!=nullptr){
+            while(tt!=nullptr && tt->getSuivant()!=nullptr){
                 i++;
                 tt = tt->getSuivant();
             }
@@ -199,12 +199,7 @@ void Bibliotheque::rendreLivresEmpruntes(vector<Bibliotheque>* listebiblios){
         Noeud* current = inventaire.getHead();
         string isbn;
         while(current!=nullptr){
-            cout << "check"<<endl;
-            cout << code << endl;
-            cout << current->getLivre().getCode() << endl;
-            cout << current->getLivre().getEtats() << endl;
             if (current->getLivre().getCode()==code && current->getLivre().getEtats()=="libre"){
-                cout << "check2"<<endl;
                 // on retrouve la bilbiothèque avec son nom
                 Bibliotheque bib;
                 for(int j=0; j<listebiblios->size();++j){

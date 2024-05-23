@@ -1,4 +1,2 @@
-nom0;adresse0;isbn0,isbn1,isbn2,lkjzghdf;;;
-nom1;adresse1;isbn0,isbn1,isbn2,isbn1,isbn0;;;
-nom2;adresse2;isbn0,isbn1,isbn2,isbn0;;;
-khfdjbsdhfl;lzjhrkjzfn;isbn0,isbn1;;;
+Municipale;adresse_de_la_biblio_municipale;isbn1,isbn6,isbn0;;;
+Nationale;adresse_de_la_biblio_nationale;isbn0,isbn2,isbn3;;;

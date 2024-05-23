@@ -1,3 +1,4 @@
-1;Jean;Jacques;adrresse 1;10;nom1;;
-2;Pierre;Paul;adresse 2;10;nom2;;
-3;Marie;Paul;adresse 3;10;Nom par défaut;;
+1;Pierre;Paul;adresse_paul;10;Municipale;;
+2;Jacques;Marie;adresse_marie;6;Municipale;;
+3;John;Fitz;adresse_fitz;10;Nationale;;
+4;Gerald;Kennedy;adresse_kennedy;5;Nationale;;

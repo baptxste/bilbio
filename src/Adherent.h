@@ -12,7 +12,7 @@ using namespace std;
 class Adherent
 {
 private:
-    static int nb_adherent;
+    static int nb_adherent; 
     string nom;
     string prenom;
     string adresse;

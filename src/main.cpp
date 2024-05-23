@@ -113,7 +113,7 @@ void creerNouvelleBiblio(){
     vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
     cout << "Pour créer une nouvelle bliotheque veuillez entrer ces informations :"<< endl;
     string nom, adresse;
-    cout << "Nom :";
+    cout << "Nom : ";
     cin >> nom;
     cout <<"Adresse : ";
     cin >> adresse;
@@ -356,6 +356,28 @@ void rendreEmpruntsBiblio(){
     Bibliotheque::enregistrerVecteurBibliotheque(listebiblios);
 }
 
+void creerAdherent(){
+    Inventaire liste_tous_livres = initLivres();
+    vector<Bibliotheque> listebiblios = Bibliotheque::initialiserVecteurBibliotheque(&liste_tous_livres);
+    vector<Adherent> listeadherents = Adherent::initVecteurAdherent(&listebiblios);
+    cout << "=== Creéation d'un adhérent ===" << endl;
+    string nom, prenom, adresse, nbmax ;
+    cout << " Nom : ";
+    cin >> nom;
+    cout << " Prénom : ";
+    cin >> prenom;
+    cout << " Adresse : ";
+    cin >> adresse;
+    cout << " Nombre d'emprunt maximal : ";
+    cin >> nbmax;
+    Bibliotheque* bib = entrezBibliotheque(&listebiblios);
+    Adherent a = Adherent(nom, prenom, adresse, stoi(nbmax), bib);
+    cout << a.getId()<< endl;
+    // cout <<Adherent::nb_adherent<<endl;
+    listeadherents.push_back(a);
+    Adherent::enregistrerVecteurAdherent(listeadherents);
+}
+
 void menu(){
     bool continuer = true;
     int choix = 0;
@@ -364,11 +386,12 @@ void menu(){
         supprimerLignesCourtes("bd/liste_biblios");
         cout << "===== Menu =====" << endl;
         cout << "1) Créer une nouvelle bibliothèque" << endl;
-        cout << "2) Effectuer un emprunt de Livre pour un adhérent" << endl;
-        cout << "3) Rendre un livre" << endl;
-        cout << "4) Ajouter un nouveau livre dans une bibliothèque." << endl;
-        cout << "5) Emprunt entre bibliothèque." << endl;
-        cout << "6) Rendre les emprunts d'une bibliothèque." << endl;
+        cout << "2) Créer un adhérent"<<endl;
+        cout << "3) Effectuer un emprunt de Livre pour un adhérent" << endl;
+        cout << "4) Rendre un livre" << endl;
+        cout << "5) Ajouter un nouveau livre dans une bibliothèque." << endl;
+        cout << "6) Emprunt entre bibliothèque." << endl;
+        cout << "7) Rendre les emprunts d'une bibliothèque." << endl;
 
         cout << "Votre choix : ";
         cin >> choix;
@@ -377,18 +400,21 @@ void menu(){
                 creerNouvelleBiblio();
                 break;
             case 2:
-                empruntDeLivre();
+                creerAdherent();
                 break;
             case 3:
-                rendreUnLivre();
+                empruntDeLivre();
                 break;
             case 4:
+                rendreUnLivre();
+                break;
+            case 5:
                 ajoutLivreBiblio();
             break;
-            case 5:
+            case 6:
                 empruntEntreBiblio();
             break;
-            case 6:
+            case 7:
                 rendreEmpruntsBiblio();
             break;
             default:
