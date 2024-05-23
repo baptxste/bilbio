@@ -5,6 +5,8 @@
 #include<fstream>
 #include<vector>
 #include"Roman.h"
+#include"Poesie.h"
+#include"Bd.h"
 #include"Inventaire.h"
 #include"Adherent.h"
 #include<sstream>
@@ -17,8 +19,16 @@ Inventaire initLivres(){
     Inventaire liste_tous_livres = Inventaire();
 
     vector<Roman> listeromans = Roman::initialiserVecteurRomans();
-    for (size_t i=0; i < listeromans.size();++i) {
+    for (int i=0; i < listeromans.size();++i) {
         liste_tous_livres.ajoute(listeromans[i]);
+    }
+    vector<Poesie> listepoesies = Poesie::initialiserVecteurPoesie();
+    for(int i = 0; i < listepoesies.size();++i){
+        liste_tous_livres.ajoute(listepoesies[i]);
+    }
+    vector<Bd> listebds = Bd::initialiserVecteurBd();
+    for(int i = 0; i < listebds.size();++i){
+        liste_tous_livres.ajoute(listebds[i]);
     }
     // repeter ces étapes pour les autres catégories
     return liste_tous_livres;
@@ -173,10 +183,10 @@ Inventaire* creerNouveauLivre(Inventaire* liste_tous_livres){
         Roman::creerRomangraphique();
         break;
     case 2:
-    /* code */
+        Poesie::creerPoesiegraphique();
     break;
     case 3:
-    /* code */
+        Bd::creerBdgraphique();
     break;
     
     default:
